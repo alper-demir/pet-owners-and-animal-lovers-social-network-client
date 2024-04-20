@@ -6,6 +6,7 @@ import MainLayout from "./layouts/MainLayout";
 import ProfileLayout from "./layouts/ProfileLayout";
 import Pets from "./pages/Pets";
 import PetDetail from "./components/pets/PetDetail";
+import PostDetail from "./components/posts/PostDetail";
 
 const router = createBrowserRouter([
     {
@@ -26,7 +27,8 @@ const router = createBrowserRouter([
                     { path: "pets", element: <Pets /> },
                 ]
             },
-            { path: "/pet/:petId", element: <PetDetail /> }
+            { path: "/pet/:petId", element: <PetDetail /> },
+            { path: "/post/:postId", element: <PostDetail /> },
         ]
     },
     { path: "*", element: "The page you are looking for is not found" }

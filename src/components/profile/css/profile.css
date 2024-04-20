@@ -1,3 +1,9 @@
-.active{
+.active {
+    color: black;
     border-color: black;
+}
+
+.dark .active {
+    color: white;
+    border-color: white;
 }

@@ -1,10 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const PetDetail = () => {
 
+    const [petOwner, setPetOwner] = useState("")
     const [pet, setPet] = useState({});
     const { petId } = useParams();
 
@@ -17,6 +18,7 @@ const PetDetail = () => {
             const petData = await axios.post(`${URL}/pet/${petId}`, {}, { headers: { Authorization: token } });
             if (petData) {
                 setPet(petData.data);
+                setPetOwner(petData.data.userId)
                 console.log(petData.data);
             }
         } catch (error) {
@@ -42,6 +44,8 @@ const PetDetail = () => {
                 <p><span className="font-semibold">Doğum Tarihi:</span> {new Date(pet.birthDate).toLocaleDateString()}</p>
                 <p><span className="font-semibold">Ağırlık:</span> {pet.weight} kg</p>
                 <p><span className="font-semibold">Renk:</span> {pet.color}</p>
+                <p><span className="font-semibold">Gender:</span> {pet.gender}</p>
+                <p><span className="font-semibold">Owner:</span> <Link to={`/${petOwner.username}`}>@{petOwner.username}</Link> </p>
                 {new Date().getFullYear() - new Date(pet.birthDate).getFullYear()} years old.
                 <p>Registered at: {new Date(pet.createdAt).toLocaleDateString()}</p>
             </div>
