@@ -1,24 +1,51 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import loading from "../../asset/loading.gif"
 import calculateTimeAgo from "../../helpers/calculateTimeAgo";
+import { useSelector } from 'react-redux';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+};
+
 const PostDetail = () => {
 
     const [post, setPost] = useState({});
+    const [postComments, setPostComments] = useState([]);
+    const [postLikes, setPostLikes] = useState([]);
     const { postId } = useParams();
     const [isLoading, setIsLoading] = useState(true)
+    const [isCommentLoading, setIsCommentLoading] = useState(false)
     const [showComment, setShowComment] = useState(false)
+    const [comment, setComment] = useState("")
+
     const URL = "http://localhost:3001"
     const token = localStorage.getItem("token");
     const navigate = useNavigate();
+    const ref = useRef();
+    const userId = useSelector(state => state.user.user.userId)
 
     const getPostData = async () => {
         try {
             const postData = await axios.post(`${URL}/post/${postId}`, {}, { headers: { Authorization: token } });
             if (postData) {
                 setPost(postData.data);
+                setPostComments(postData.data.comments);
+                setPostLikes(postData.data.likes);
                 console.log(postData.data);
                 setIsLoading(false)
             }
@@ -37,13 +64,41 @@ const PostDetail = () => {
         setShowComment(prev => !prev)
     }
 
+    const shareComment = async () => {
+        if (comment.length > 0) {
+            setIsCommentLoading(true)
+
+            try {
+                const createComment = await axios.post(`${URL}/create-comment`, { userId, postId, content: comment }, { headers: { Authorization: token } });
+                if (createComment) {
+                    console.log(createComment.data);
+                    getPostData();
+                    setIsCommentLoading(false)
+                    toast.success("New comment added to post.")
+                    setComment("")
+                    ref.current.value = ""
+                }
+            } catch (error) {
+
+            }
+        }
+        else {
+            toast.error("Input field can not be empty!");
+        }
+
+    }
+
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
     return (
         <>
             {
                 isLoading ? (
                     <div className="flex justify-center items-center mt-20"> <img src={loading} alt="" className="w-16 h-16" /> </div>
                 ) : (
-                    <div className='w-full mx-auto mt-3 border rounded-md dark:border-opacity-20 border-gray-200 text-[15px] max-sm:text-xs max-lg:text-sm'>
+                    <div className='w-full mx-auto mt-3 mb-20 border rounded-md dark:border-opacity-20 border-gray-200 text-[15px] max-sm:text-xs max-lg:text-sm'>
 
                         <div className='flex rounded-md flex-col'>
 
@@ -106,16 +161,14 @@ const PostDetail = () => {
                                 <div className='flex gap-1 text-[#999999] dark:text-[#777777]'>
                                     <span onClick={showComments} className="hover:underline underline-offset-2 cursor-pointer">{post.comments.length} comments</span>
                                     <span>&nbsp;·&nbsp;</span>
-                                    <span className="hover:underline underline-offset-2 cursor-pointer">{post.likes.length} likes</span>
+                                    <span onClick={handleOpen} className="hover:underline underline-offset-2 cursor-pointer">{post.likes.length} likes</span>
                                 </div>
-
-
 
                             </div>
                             {
                                 showComment &&
-                                post.comments.map(comment => (
-                                    <div className="border-t p-3">
+                                postComments.map(comment => (
+                                    <div className="border-t p-3 dark:text-white break-words dark:border-opacity-20 border-gray-200">
                                         <div className="flex justify-between items-center">
 
                                             <div className="flex gap-x-1 items-center">
@@ -139,7 +192,7 @@ const PostDetail = () => {
                                             </div>
 
 
-                                            <div className='text-[#999999] dark:text-[#777777] cursor-pointer'>
+                                            <div className='text-[#999999] dark:text-[#777777] cursor-pointer text-sm max-sm:text-xs'>
                                                 <div title={new Date(comment.createdAt).toLocaleString()}>
                                                     {
                                                         calculateTimeAgo(comment.createdAt)
@@ -160,16 +213,53 @@ const PostDetail = () => {
                             }
 
 
+
                         </div>
 
-
-
-                        {/* date */}
+                        <div className=" flex justify-between border-t relative">
+                            <input type="text" placeholder="add a comment.." className="w-full p-2 rounded-md pr-20 max-sm:pr-14 rounded-tl-none rounded-tr-none" onChange={(e) => setComment(e.target.value)} ref={ref} />
+                            <button className="p-2 absolute right-0 hover:underline underline-offset-2 cursor-pointer text-blue-500 hover:text-blue-700 font-semibold" onClick={shareComment}>
+                                Share
+                            </button>
+                            {
+                                isCommentLoading && <img src={loading} alt="" className="w-6 h-6 top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 absolute" />
+                            }
+                        </div>
 
                     </div>
+
                 )
             }
 
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/5 max-xl:w-2/5 max-md:w-3/5 p-4 border bg-white dark:bg-[#101010] dark:text-white dark:bg-opacity-70">
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Likes
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }} >
+                        {
+                            postLikes && postLikes.map(postLike => (
+                                <div className="flex gap-x-2 items-center my-1 text-[15px] max-sm:text-xs max-lg:text-sm">
+                                    <div>
+                                        <Link to={`/${postLike.username}`}>
+                                            <img src={`${URL}/public/images/${postLike.profileUrl}`} alt="img" className='min-w-[36px] h-9 w-9 object-cover rounded-full' />
+                                        </Link>
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <Link to={`/${postLike.username}`}>{postLike.firstName + " " + postLike.lastName}</Link>
+                                        <Link to={`/${postLike.username}`}>@{postLike.username}</Link>
+                                    </div>
+                                </div>
+                            ))
+                        }
+                    </Typography>
+                </Box>
+            </Modal>
         </>
     );
 }
