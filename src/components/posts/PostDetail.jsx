@@ -6,21 +6,8 @@ import loading from "../../asset/loading.gif"
 import calculateTimeAgo from "../../helpers/calculateTimeAgo";
 import { useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-};
 
 const PostDetail = () => {
 
@@ -32,6 +19,8 @@ const PostDetail = () => {
     const [isCommentLoading, setIsCommentLoading] = useState(false)
     const [showComment, setShowComment] = useState(false)
     const [comment, setComment] = useState("")
+    const [currentUserLikedPost, setCurrentUserLikedPost] = useState(false);
+
 
     const URL = "http://localhost:3001"
     const token = localStorage.getItem("token");
@@ -58,11 +47,29 @@ const PostDetail = () => {
 
     useEffect(() => {
         getPostData();
+        checkPostLikedStatus();
     }, [])
 
     const showComments = () => {
         setShowComment(prev => !prev)
     }
+
+    const likePost = async () => {
+        const likePost = await axios.post(`${URL}/like-post`, { userId, postId }, { headers: { Authorization: token } });
+        console.log(likePost.data);
+        getPostData();
+        checkPostLikedStatus();
+    }
+
+    const checkPostLikedStatus = async () => {
+        try {
+            const liked = await axios.post(`${URL}/check-post-like-status`, { userId, postId }, { headers: { Authorization: token } });
+            liked && setCurrentUserLikedPost(liked.data.liked)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
 
     const shareComment = async () => {
         if (comment.length > 0) {
@@ -144,11 +151,11 @@ const PostDetail = () => {
                                 </div>
                                 {/* icons */}
                                 <div className='flex gap-1 -ml-2'>
-                                    <div className='hover:bg-[#F5F5F5] dark:hover:bg-[#1E1E1E] p-2 rounded-full transition-colors duration-200 cursor-pointer'>
-                                        <svg aria-label="Beğen" class="x1lliihq x1n2onr6 dark:text-white" color="rgb(0, 0, 0)" fill="transparent" height="19" role="img" viewBox="0 0 24 22" width="20"><title>Beğen</title><path d="M1 7.66c0 4.575 3.899 9.086 9.987 12.934.338.203.74.406 1.013.406.283 0 .686-.203 1.013-.406C19.1 16.746 23 12.234 23 7.66 23 3.736 20.245 1 16.672 1 14.603 1 12.98 1.94 12 3.352 11.042 1.952 9.408 1 7.328 1 3.766 1 1 3.736 1 7.66Z" stroke="currentColor" stroke-width="2"></path></svg>
+                                    <div onClick={likePost} className='hover:bg-[#F5F5F5] dark:hover:bg-[#1E1E1E] p-2 rounded-full transition-colors duration-200 cursor-pointer'>
+                                        <svg aria-label="Beğen" class="x1lliihq x1n2onr6 dark:text-white" color="rgb(0, 0, 0)" fill={currentUserLikedPost ? "red" : "transparent"} height="19" role="img" viewBox="0 0 24 22" width="20"><title>Like</title><path d="M1 7.66c0 4.575 3.899 9.086 9.987 12.934.338.203.74.406 1.013.406.283 0 .686-.203 1.013-.406C19.1 16.746 23 12.234 23 7.66 23 3.736 20.245 1 16.672 1 14.603 1 12.98 1.94 12 3.352 11.042 1.952 9.408 1 7.328 1 3.766 1 1 3.736 1 7.66Z" stroke="currentColor" stroke-width="2"></path></svg>
                                     </div>
                                     <div className='hover:bg-[#F5F5F5] dark:hover:bg-[#1E1E1E] p-2 rounded-full transition-colors duration-200 cursor-pointer' onClick={() => ref.current.focus()}>
-                                        <svg aria-label="Yorum Yap" class="x1lliihq x1n2onr6 dark:text-white" color="rgb(0, 0, 0)" fill="rgb(0, 0, 0)" height="20" role="img" viewBox="0 0 24 24" width="20"><title>Yorum Yap</title><path d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path></svg>
+                                        <svg aria-label="Yorum Yap" class="x1lliihq x1n2onr6 dark:text-white" color="rgb(0, 0, 0)" fill="rgb(0, 0, 0)" height="20" role="img" viewBox="0 0 24 24" width="20"><title>Comment</title><path d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path></svg>
                                     </div>
                                 </div>
 
