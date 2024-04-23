@@ -147,14 +147,8 @@ const PostDetail = () => {
                                     <div className='hover:bg-[#F5F5F5] dark:hover:bg-[#1E1E1E] p-2 rounded-full transition-colors duration-200 cursor-pointer'>
                                         <svg aria-label="Beğen" class="x1lliihq x1n2onr6 dark:text-white" color="rgb(0, 0, 0)" fill="transparent" height="19" role="img" viewBox="0 0 24 22" width="20"><title>Beğen</title><path d="M1 7.66c0 4.575 3.899 9.086 9.987 12.934.338.203.74.406 1.013.406.283 0 .686-.203 1.013-.406C19.1 16.746 23 12.234 23 7.66 23 3.736 20.245 1 16.672 1 14.603 1 12.98 1.94 12 3.352 11.042 1.952 9.408 1 7.328 1 3.766 1 1 3.736 1 7.66Z" stroke="currentColor" stroke-width="2"></path></svg>
                                     </div>
-                                    <div className='hover:bg-[#F5F5F5] dark:hover:bg-[#1E1E1E] p-2 rounded-full transition-colors duration-200 cursor-pointer'>
+                                    <div className='hover:bg-[#F5F5F5] dark:hover:bg-[#1E1E1E] p-2 rounded-full transition-colors duration-200 cursor-pointer' onClick={() => ref.current.focus()}>
                                         <svg aria-label="Yorum Yap" class="x1lliihq x1n2onr6 dark:text-white" color="rgb(0, 0, 0)" fill="rgb(0, 0, 0)" height="20" role="img" viewBox="0 0 24 24" width="20"><title>Yorum Yap</title><path d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path></svg>
-                                    </div>
-                                    <div className='hover:bg-[#F5F5F5] dark:hover:bg-[#1E1E1E] p-2 rounded-full transition-colors duration-200 cursor-pointer'>
-                                        <svg aria-label="Yeniden paylaş" class="x1lliihq x1n2onr6 dark:text-white dark:fill-white" color="rgb(0, 0, 0)" fill="rgb(0, 0, 0)" height="20" role="img" viewBox="0 0 24 24" width="20"><title>Yeniden paylaş</title><path d="M19.998 9.497a1 1 0 0 0-1 1v4.228a3.274 3.274 0 0 1-3.27 3.27h-5.313l1.791-1.787a1 1 0 0 0-1.412-1.416L7.29 18.287a1.004 1.004 0 0 0-.294.707v.001c0 .023.012.042.013.065a.923.923 0 0 0 .281.643l3.502 3.504a1 1 0 0 0 1.414-1.414l-1.797-1.798h5.318a5.276 5.276 0 0 0 5.27-5.27v-4.228a1 1 0 0 0-1-1Zm-6.41-3.496-1.795 1.795a1 1 0 1 0 1.414 1.414l3.5-3.5a1.003 1.003 0 0 0 0-1.417l-3.5-3.5a1 1 0 0 0-1.414 1.414l1.794 1.794H8.27A5.277 5.277 0 0 0 3 9.271V13.5a1 1 0 0 0 2 0V9.271a3.275 3.275 0 0 1 3.271-3.27Z"></path></svg>
-                                    </div>
-                                    <div className='hover:bg-[#F5F5F5] dark:hover:bg-[#1E1E1E] p-2 rounded-full transition-colors duration-200 cursor-pointer'>
-                                        <svg aria-label="Paylaş" class="x1lliihq x1n2onr6 dark:text-white" color="rgb(0, 0, 0)" fill="rgb(0, 0, 0)" height="20" role="img" viewBox="0 0 24 24" width="20"><title>Paylaş</title><line fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2" x1="22" x2="9.218" y1="3" y2="10.083"></line><polygon fill="none" points="11.698 20.334 22 3.001 2 3.001 9.218 10.084 11.698 20.334" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></polygon></svg>
                                     </div>
                                 </div>
 
@@ -165,59 +159,62 @@ const PostDetail = () => {
                                 </div>
 
                             </div>
-                            {
-                                showComment &&
-                                postComments.map(comment => (
-                                    <div className="border-t p-3 dark:text-white break-words dark:border-opacity-20 border-gray-200">
-                                        <div className="flex justify-between items-center">
+                            <div className="overflow-y-auto max-h-96">
+                                {
+                                    showComment &&
+                                    postComments.map(comment => (
+                                        <div className="border-t p-3 dark:text-white break-words dark:border-opacity-20 border-gray-200">
+                                            <div className="flex justify-between items-center">
 
-                                            <div className="flex gap-x-1 items-center">
-                                                <div>
-                                                    <Link to={`/${comment.userId.username}`}>
-                                                        <img src={`${URL}/public/images/${comment.userId.profileUrl}`} alt="img" className='min-w-[36px] h-9 w-9 object-cover rounded-full' />
-                                                    </Link>
-                                                </div>
-
-                                                <div className='flex flex-col gap-x-1 font-semibold max-sm:flex-col'>
-                                                    <div className="hover:underline underline-offset-2 cursor-pointer">
+                                                <div className="flex gap-x-1 items-center">
+                                                    <div>
                                                         <Link to={`/${comment.userId.username}`}>
-                                                            {comment.userId.firstName + " " + comment.userId.lastName}
+                                                            <img src={`${URL}/public/images/${comment.userId.profileUrl}`} alt="img" className='min-w-[36px] h-9 w-9 object-cover rounded-full' />
                                                         </Link>
                                                     </div>
-                                                    <div className="text-sm max-sm:text-xs">
-                                                        <Link to={`/${comment.userId.username}`}>@{comment.userId.username}</Link>
+
+                                                    <div className='flex flex-col gap-x-1 font-semibold max-sm:flex-col'>
+                                                        <div className="hover:underline underline-offset-2 cursor-pointer">
+                                                            <Link to={`/${comment.userId.username}`}>
+                                                                {comment.userId.firstName + " " + comment.userId.lastName}
+                                                            </Link>
+                                                        </div>
+                                                        <div className="text-sm max-sm:text-xs">
+                                                            <Link to={`/${comment.userId.username}`}>@{comment.userId.username}</Link>
+                                                        </div>
                                                     </div>
+
+                                                </div>
+
+
+                                                <div className='text-[#999999] dark:text-[#777777] cursor-pointer text-sm max-sm:text-xs'>
+                                                    <div title={new Date(comment.createdAt).toLocaleString()}>
+                                                        {
+                                                            calculateTimeAgo(comment.createdAt)
+                                                        }
+                                                    </div>
+
                                                 </div>
 
                                             </div>
 
-
-                                            <div className='text-[#999999] dark:text-[#777777] cursor-pointer text-sm max-sm:text-xs'>
-                                                <div title={new Date(comment.createdAt).toLocaleString()}>
-                                                    {
-                                                        calculateTimeAgo(comment.createdAt)
-                                                    }
-                                                </div>
-
+                                            <div className="my-2">
+                                                {comment.content}
                                             </div>
 
+
                                         </div>
+                                    ))
+                                }
+                            </div>
 
-                                        <div className="my-2">
-                                            {comment.content}
-                                        </div>
-
-
-                                    </div>
-                                ))
-                            }
 
 
 
                         </div>
 
-                        <div className=" flex justify-between border-t relative">
-                            <input type="text" placeholder="add a comment.." className="w-full p-2 rounded-md pr-20 max-sm:pr-14 rounded-tl-none rounded-tr-none" onChange={(e) => setComment(e.target.value)} ref={ref} />
+                        <div className="flex justify-between dark:border-opacity-20 border-gray-200 border-t relative">
+                            <input type="text" placeholder="add a comment.." className="w-full p-2 rounded-md pr-20 max-sm:pr-14 rounded-tl-none rounded-tr-none dark:bg-[#101010] dark:text-white" onChange={(e) => setComment(e.target.value)} ref={ref} />
                             <button className="p-2 absolute right-0 hover:underline underline-offset-2 cursor-pointer text-blue-500 hover:text-blue-700 font-semibold" onClick={shareComment}>
                                 Share
                             </button>
@@ -226,7 +223,7 @@ const PostDetail = () => {
                             }
                         </div>
 
-                    </div>
+                    </div >
 
                 )
             }
@@ -237,7 +234,7 @@ const PostDetail = () => {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Box className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/5 max-xl:w-2/5 max-md:w-3/5 p-4 border bg-white dark:bg-[#101010] dark:text-white dark:bg-opacity-70">
+                <Box className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/5 max-xl:w-2/5 max-md:w-3/5 p-4 outline-indigo-400 bg-white dark:bg-[#101010] dark:text-white max-h-80 overflow-y-auto rounded-md">
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         Likes
                     </Typography>
