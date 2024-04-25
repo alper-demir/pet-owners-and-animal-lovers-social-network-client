@@ -6,6 +6,7 @@ import "../components/profile/css/profile.css"
 import axios from 'axios'
 import { MdCreateNewFolder } from "react-icons/md";
 import { IoIosCreate } from "react-icons/io";
+import loading from "../asset/loading.gif"
 
 const ProfileContext = createContext();
 
@@ -19,8 +20,11 @@ const ProfileLayout = () => {
     const [posts, setPosts] = useState([])
     const [pets, setPets] = useState([])
     const [ownProfile, setOwnProfile] = useState();
-    const [petCount, setPetCount] = useState(0);
-    const [postCount, setPostCount] = useState(0);
+    const [requestStatus, setRequestStatus] = useState();
+    const [isStatusLoading, setIsStatusLoading] = useState(true);
+    const [isVisibilityLoading, setIsVisibilityLoading] = useState(true);
+    const [profileVisibility, setProfileVisibility] = useState(true);
+    const [status, setStatus] = useState({})
 
     const token = localStorage.getItem("token");
     const URL = "http://localhost:3001"
@@ -30,9 +34,8 @@ const ProfileLayout = () => {
             const userData = await axios.post(`${URL}/user-data/${username}`, {}, { headers: { Authorization: token } })
             if (userData) {
                 setUser(userData.data.user)
-                setPetCount(userData.data.user.pets.length)
-                setPostCount(userData.data.user.posts.length)
                 console.log(userData.data.user);
+
             }
         } catch (error) {
             console.log(error);
@@ -75,9 +78,62 @@ const ProfileLayout = () => {
         getPosts();
         getPetProfiles();
         isUserInOwnProfile();
+        checkRequestStatus();
+        checkProfileVisibility();
     }, [username])
 
-    const img = useSelector((state) => state.user.user.profileUrl);
+    const img = user.profileUrl
+
+    const checkRequestStatus = async () => {
+        setIsStatusLoading(true)
+        try {
+            const res = await axios.post(`${URL}/check-friend-request`, { senderId: userId, receiverUsername: username }, { headers: { Authorization: token } });
+            if (res) {
+                console.log(res.data);
+                setRequestStatus(res.data.status)
+                setIsStatusLoading(false)
+                checkProfileVisibility();
+            }
+        } catch (error) {
+
+        }
+    }
+
+    const sendRequest = async () => {
+        console.log(user._id);
+        setIsStatusLoading(true)
+        try {
+            const response = await axios.post(`${URL}/send-friend-request`, { senderId: userId, receiverId: user._id }, { headers: { Authorization: token } });
+            console.log(response);
+            checkRequestStatus();
+            setIsStatusLoading(false)
+        } catch (error) {
+
+        }
+    }
+
+    const checkProfileVisibility = async () => {
+        setIsVisibilityLoading(true)
+        if (username !== currentUser) {
+            try {
+                const response = await axios.post(`${URL}/check-profile-visibility`, { currentUserId: userId, username }, { headers: { Authorization: token } });
+                if (response) {
+                    console.log(response.data);
+                    setProfileVisibility(response.data.visibility);
+                    setStatus(response.data)
+                    setIsVisibilityLoading(false)
+                }
+            } catch (error) {
+                console.error("Error checking profile visibility:", error);
+            }
+        } else {
+            // Kullanıcı kendi profilinde, herhangi bir kontrol yapma
+            setProfileVisibility(true)
+            setIsVisibilityLoading(false)
+        }
+    };
+
+
 
     return (
         <div>
@@ -120,15 +176,49 @@ const ProfileLayout = () => {
                         </div>
                     </div>
                 }
+
+                {
+                    !ownProfile &&
+                    <div className='border text-center my-2 rounded-xl py-2 font-semibold cursor-pointer dark:text-white dark:border-[#777777] relative min-h-9'
+                        onClick={sendRequest}>
+                        {
+                            isStatusLoading ? (
+                                <img src={loading} alt="" className="w-6 h-6 top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2 absolute" />
+                            ) : (
+                                <button>
+                                    {requestStatus === "pending" ? "Pending" : (requestStatus === "accepted" ? "Unfollow" : (!status.isPrivate ? "Follow" : "Send follow request"))}
+                                </button>
+                            )
+                        }
+                    </div>
+                }
+
             </div>
 
-            <Links username={username} />
+            {
+                !isVisibilityLoading ? (
+                    profileVisibility ?
+                        (
+                            <>
+                                <Links username={username} />
 
-            <ProfileContext.Provider value={{ posts, pets }}>
-                <div className='mb-20 max-sm:mb-28'>
-                    <Outlet />
-                </div>
-            </ProfileContext.Provider>
+                                <ProfileContext.Provider value={{ posts, pets }}>
+                                    <div className='mb-20 max-sm:mb-28'>
+                                        <Outlet />
+                                    </div>
+                                </ProfileContext.Provider>
+                            </>
+                        ) :
+                        (
+                            <p className='dark:text-white mt-2'>You must follow this user to access the profile!</p>
+                        )
+                ) :
+                    (
+                        <div className='flex justify-center items-center mt-20'>
+                            <img src={loading} alt="" className="w-6 h-6" />
+                        </div>
+                    )
+            }
 
         </div>
     )
