@@ -17,7 +17,7 @@ const MainLayout = () => {
 
                     <Navbar />
 
-                    <div className='max-w-2xl mx-auto flex justify-center mt-2 relative text-sm flex-col max-sm:m-2 max-sm:text-xs'>
+                    <div className='max-w-3xl mx-auto flex justify-center mt-2 relative text-sm flex-col max-sm:m-2 max-sm:text-xs'>
                         <Outlet />
                     </div>
                 </div>
