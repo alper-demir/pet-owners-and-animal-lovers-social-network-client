@@ -8,6 +8,11 @@ import { MdCreateNewFolder } from "react-icons/md";
 import { IoIosCreate } from "react-icons/io";
 import loading from "../asset/loading.gif"
 
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+import { toast } from 'react-hot-toast';
+
 const ProfileContext = createContext();
 
 const ProfileLayout = () => {
@@ -133,10 +138,154 @@ const ProfileLayout = () => {
         }
     };
 
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => {
+        setOpen(true)
+        setAboutValue(user.about)
+        setGenderValue(user.gender)
+        setPrivacyValue(user.privacy)
+    }
+    const handleClose = () => setOpen(false);
+
+    const [selectedFile, setSelectedFile] = useState(null);
+
+    const handleFileChange = (event) => {
+        setSelectedFile(event.target.files[0]);
+    };
+
+
+    const handleProfilePictureUpdate = async () => {
+
+        if (!selectedFile) {
+            alert('Please select a file.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('image', selectedFile);
+
+        try {
+            const response = await axios.put(`${URL}/update-profile-image/${userId}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: token
+                }
+            });
+            if (response.data.status === "success") {
+                toast.success(response.data.message)
+                setSelectedFile(null);
+                getUserData();
+            }
+            console.log(response.data);
+        } catch (error) {
+            console.error('Error updating profile picture:', error);
+            alert('An error occurred while updating profile picture.');
+        }
+    };
+
+    const [aboutValue, setAboutValue] = useState('');
+    const [genderValue, setGenderValue] = useState('male');
+    const [privacyValue, setPrivacyValue] = useState('private');
+
+    const handleAboutChange = (e) => {
+        setAboutValue(e.target.value);
+    };
+
+    const handleGenderChange = (e) => {
+        setGenderValue(e.target.value);
+    };
+
+    const handlePrivacyChange = (e) => {
+        setPrivacyValue(e.target.value);
+    };
+
+    const handleProfileUpdate = async () => {
+        const updatedProfile = {
+            about: aboutValue,
+            gender: genderValue,
+            privacy: privacyValue
+        };
+
+        try {
+            const response = await axios.put(`${URL}/update-profile/${userId}`, updatedProfile, {
+                headers: {
+                    Authorization: token
+                }
+            });
+
+            if (response.data.status === "success") {
+                toast.success(response.data.message);
+                getUserData();
+            } else {
+                toast.error("An error occurred while updating profile.");
+            }
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            toast.error("An error occurred while updating profile.");
+        }
+    };
 
 
     return (
         <div>
+
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/5 max-xl:w-3/5 max-md:w-4/5 max-sm:w-[95%] max-sm:text-xs p-6 bg-white dark:bg-[#101010] dark:text-white rounded-md overflow-y-auto max-h-[85%]">
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Edit Profile
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }} >
+                        <div className='border-b-2'>
+                            <div className='py-4'>
+                                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Profile Picture</label>
+                                <div className='flex gap-x-10 max-sm:gap-x-4 items-center max-sm:justify-between'>
+                                    <div>
+                                        <img src={`${URL}/public/images/${user.profileUrl}`} alt="profilePic" className='w-40 h-40 min-w-40 min-h-40 object-cover rounded-xl max-sm:w-28 max-sm:h-28 max-sm:min-w-28 max-sm:min-h-28' />
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <input type="file" name="image" id="image" onChange={handleFileChange} accept="image/*" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='flex justify-end mt-2'>
+                                    <button onClick={handleProfilePictureUpdate} type="submit" className="text-white bg-blue-700 enabled:hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:focus:ring-blue-800">Change Profile Picture</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div className="bg-white dark:bg-transparent my-3">
+                                <label htmlFor="about" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">About</label>
+                                <textarea id="about" rows="3" className="px-4 py-2 w-full text-sm text-gray-900 bg-white border rounded-lg dark:bg-transparent dark:text-white dark:placeholder-gray-400 outline-none resize-none" placeholder="About.." value={aboutValue} onChange={handleAboutChange} required />
+                            </div>
+                            <div className="bg-white dark:bg-transparent my-3">
+                                <label htmlFor="gender" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Gender</label>
+                                <select id="gender" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-[#101010] dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value={genderValue} onChange={handleGenderChange}>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+                            <div className="bg-white dark:bg-transparent my-3">
+                                <label htmlFor="privacy" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" title='Change account visibility'>Privacy</label>
+                                <select id="privacy" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-[#101010] dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value={privacyValue} onChange={handlePrivacyChange}>
+                                    <option value="private">Private</option>
+                                    <option value="public">Public</option>
+                                </select>
+                            </div>
+                            <div className="flex justify-end bg-white dark:bg-transparent my-3">
+                                <button onClick={handleProfileUpdate} type="submit" className="text-white bg-blue-700 enabled:hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:focus:ring-blue-800">Send</button>
+                            </div>
+                        </div>
+                    </Typography>
+                </Box>
+
+
+            </Modal>
 
             <div className="flex flex-col w-full">
                 <div className='flex justify-between items-center w-full mt-2 max-sm:px-2'>
@@ -167,8 +316,8 @@ const ProfileLayout = () => {
             <div>
                 {ownProfile &&
                     <div>
-                        <div className='border text-center my-2 rounded-xl py-2 font-semibold cursor-pointer dark:text-white dark:border-[#777777]' onClick={() => console.log("profil düzenleye basıldı")}>
-                            <button>Profili Düzenle</button>
+                        <div className='border text-center my-2 rounded-xl py-2 font-semibold cursor-pointer dark:text-white dark:border-[#777777]' onClick={handleOpen}>
+                            <button>Edit Profile</button>
                         </div>
                         <div className='flex justify-evenly text-3xl max-sm:text-2xl items-center mt-5 text-gray-500 dark:text-white'>
                             <div className='cursor-pointer hover:scale-125 duration-200'><IoIosCreate /></div>
