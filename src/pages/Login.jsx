@@ -3,15 +3,15 @@ import axios from "axios";
 import { Link, useNavigate } from 'react-router-dom';
 import toast from "react-hot-toast";
 import useFetch from "../helpers/useFetch";
+import loading from "../asset/loading.gif"
 
 const Login = () => {
 
     const navigate = useNavigate();
-    const ref = useRef();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [buttonEnabled, setButtonEnabled] = useState(false);
-    
+
     const URL = "http://localhost:3001";
     const { isLoading } = useFetch();
 
@@ -37,7 +37,7 @@ const Login = () => {
             const response = await axios.post(`${URL}/login`, { email, password });
             const { token } = response.data;
             localStorage.setItem("token", token);
-            toast.success("Başarıyla giriş yaptınız!", { duration: 3000 });
+            toast.success("Logged in successful");
 
             navigate("/");
         } catch (error) {
@@ -53,15 +53,11 @@ const Login = () => {
     return (
         <div>
             {isLoading ? (
-                <div>Loading...</div>
+                <div className="flex justify-center items-center mt-20"> <img src={loading} alt="" className="w-16 h-16" /> </div>
             ) : (
                 <>
-                    <div className="fixed top-1/4 w-full">
-                        <form className="max-w-md mx-auto border p-8 text-sm text-gray-500" onSubmit={handleLogin}>
-                            <div className="flex gap-x-2 text-black">
-                                <Link to="/">Home</Link>
-                                <Link to="/posts">Posts</Link>
-                            </div>
+                    <div className="fixed top-1/4 w-full max-sm:p-4">
+                        <form className="max-w-md mx-auto border p-8 text-sm rounded-lg shadow-md" onSubmit={handleLogin}>
                             <div className="relative z-0 w-full mb-5 group">
                                 <input type="email" name="floating_email" id="floating_email" className="block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required onChange={handleEmail} />
                                 <label htmlFor="floating_email" className="peer-focus:font-medium absolute dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Email address</label>
@@ -73,14 +69,16 @@ const Login = () => {
                             </div>
 
                             <div className="flex justify-end my-2">
-                                <button disabled={!buttonEnabled} type="submit" ref={ref} className="px-2 py-1 bg-gray-400 text-white rounded-md text-base enabled:hover:bg-gray-500 transition-colors duration-300">Enter</button>
+                                <button disabled={!buttonEnabled} type="submit" class="text-white bg-blue-700 enabled:hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 enabled:dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login</button>
                             </div>
-                            <div className="mt-2">
-                                <span className="flex justify-end hover:underline cursor-pointer underline-offset-2">Reset password</span>
+                            <div className="mt-4 flex justify-between max-sm:flex-col max-sm:gap-y-2">
+                                <div>
+                                    <span>Not registered? <Link to="/register" className="text-blue-700 hover:underline dark:text-blue-500 underline-offset-2">Create account</Link></span>
+                                </div>
+                                <div>
+                                    <span className="hover:underline cursor-pointer underline-offset-2 text-blue-700">I forgot my password</span>
+                                </div>
                             </div>
-                            {
-                                email + " " + password
-                            }
                         </form>
                     </div>
                 </>
