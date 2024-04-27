@@ -10,11 +10,16 @@ import PostDetail from "./components/posts/PostDetail";
 import Notifications from "./pages/Notifications";
 import LostPets from "./pages/LostPets";
 import LostPetDetail from "./components/lost-pets/LostPetDetail";
+import Register from "./pages/Register";
 
 const router = createBrowserRouter([
     {
         path: "login",
         element: <Login />
+    },
+    {
+        path: "register",
+        element: <Register />
     },
     {
         path: "",
