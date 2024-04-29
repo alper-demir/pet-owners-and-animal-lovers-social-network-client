@@ -48,11 +48,12 @@ const CreatePost = ({ openCreatePostModal, setOpenCreatePostModal, getPosts }) =
                 }
             });
             if (response.data.status === "success") {
-                toast.success(response.data.message)
-                setOpen(false)
-                getPosts()
+                toast.success(response.data.message);
+                setOpen(false);
+                setOpenCreatePostModal(false);
+                getPosts();
             } else {
-                toast.error(response.data.message)
+                toast.error(response.data.message);
             }
             console.log(response.data);
         } catch (error) {
@@ -107,7 +108,7 @@ const CreatePost = ({ openCreatePostModal, setOpenCreatePostModal, getPosts }) =
                         </div>
                         <div className="my-4">
                             <label htmlFor="content" className="block mb-2 text-sm font-medium">Content</label>
-                            <textarea name="content" id="content" rows="4" placeholder='Content..' className='resize-none w-full p-2 border dark:border-[#777777] dark:border-opacity-30 rounded-md outline-none dark:bg-transparent' onChange={(e) => setContent(e.target.value)}></textarea>
+                            <textarea name="content" id="content" rows="5" placeholder='Content..' className='resize-none w-full p-2 border dark:border-[#777777] dark:border-opacity-30 rounded-md outline-none dark:bg-transparent ' onChange={(e) => setContent(e.target.value)}></textarea>
                         </div>
 
 

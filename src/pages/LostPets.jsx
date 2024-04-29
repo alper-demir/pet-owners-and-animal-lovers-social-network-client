@@ -46,19 +46,19 @@ const LostPets = () => {
                 <table class="w-full text-xs rtl:text-right text-gray-500 dark:text-gray-400 text-center">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="p-4">
                                 Profile
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="p-4">
                                 Description
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="p-4">
                                 Notice Status
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="p-4">
                                 Location
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="p-4">
                                 Notice Date
                             </th>
                         </tr>
@@ -67,7 +67,7 @@ const LostPets = () => {
                         {
                             lostPets.map(pet => (
                                 <tr onClick={() => handleRowClick(pet._id)} key={pet._id} class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 cursor-pointer">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <th scope="row" class="p-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         <div className='flex flex-col gap-y-1 items-center'>
                                             <div>
                                                 <img src={`${URL}/public/images/${pet.image}`} alt={pet.title} className="h-24 w-24 cursor-pointer group-hover:scale-95 duration-300 object-cover rounded-md max-sm:w-[4.5rem] max-sm:h-[4.5rem]" />
@@ -80,16 +80,16 @@ const LostPets = () => {
                                             </div>
                                         </div>
                                     </th>
-                                    <td class="px-6 py-4">
+                                    <td class="p-4">
                                         {pet.description}
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="p-4">
                                         {pet.lostStatus}
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="p-4">
                                         {pet.city}
                                     </td>
-                                    <td class="px-6 py-4">
+                                    <td class="p-4">
                                         <span>{new Date(pet.createdAt).toLocaleString()}</span>
                                     </td>
                                 </tr>

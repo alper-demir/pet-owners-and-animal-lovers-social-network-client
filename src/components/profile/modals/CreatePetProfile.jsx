@@ -67,6 +67,7 @@ const CreatePetProfile = ({ openCreatePetProfileModal, setOpenCreatePetProfileMo
                 if (response.data.status === "success") {
                     toast.success(response.data.message);
                     setOpen(false);
+                    setOpenCreatePetProfileModal(false);
                     getPetProfiles();
                 } else {
                     toast.error(response.data.message);
@@ -105,7 +106,7 @@ const CreatePetProfile = ({ openCreatePetProfileModal, setOpenCreatePetProfileMo
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Box className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/5 max-xl:w-3/5 max-md:w-4/5 max-sm:w-[95%] max-sm:text-xs p-6 outline-indigo-400 bg-white dark:bg-[#101010] dark:text-white rounded-md overflow-y-auto max-h-[85%]">
+                <Box className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/5 max-xl:w-3/5 max-md:w-4/5 max-sm:w-[95%] max-sm:text-xs p-6 outline-indigo-400 bg-white dark:bg-[#101010] dark:text-white rounded-md overflow-y-auto max-h-[88%]">
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         Create Pet Profile
                     </Typography>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import loadingGIF from "../../asset/loading.gif"
 import { useSelector } from 'react-redux';
 
@@ -155,7 +155,7 @@ const LostPetDetail = () => {
                     (lostPet && <>
                         <div className="mt-8 shadow-md p-4 rounded-lg flex flex-col gap-y-1 relative">
                             {
-                                lostPet.createdBy._id === user &&
+                                lostPet.userId._id === user &&
                                 <div className='absolute top-2 right-2'>
                                     <button className='p-2 bg-yellow-300 rounded-lg hover:bg-yellow-200' onClick={handleOpen}>Güncelle</button>
                                 </div>
