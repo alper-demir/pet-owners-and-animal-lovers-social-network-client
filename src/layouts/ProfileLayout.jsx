@@ -351,7 +351,7 @@ const ProfileLayout = () => {
 
                 {
                     openCreatePostModal &&
-                    <CreatePost openCreatePostModal={openCreatePostModal} setOpenPostCreateModal={setOpenCreatePostModal} getPosts={getPosts} />
+                    <CreatePost openCreatePostModal={openCreatePostModal} setOpenCreatePostModal={setOpenCreatePostModal} getPosts={getPosts} />
                 }
 
                 {
@@ -361,7 +361,7 @@ const ProfileLayout = () => {
 
                 {
                     openCreateNoticeModal &&
-                    <CreateNotice openCreateNoticeModal={openCreateNoticeModal} setOpenCreateNoticeModal={setOpenCreateNoticeModal} />
+                    <CreateNotice openCreateNoticeModal={openCreateNoticeModal} setOpenCreateNoticeModal={setOpenCreateNoticeModal} getNotices={getNotices} />
                 }
 
                 {

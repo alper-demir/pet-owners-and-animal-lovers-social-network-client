@@ -11,6 +11,7 @@ import Notifications from "./pages/Notifications";
 import LostPets from "./pages/LostPets";
 import LostPetDetail from "./components/lost-pets/LostPetDetail";
 import Register from "./pages/Register";
+import Notices from "./pages/Notices";
 
 const router = createBrowserRouter([
     {
@@ -33,6 +34,7 @@ const router = createBrowserRouter([
                 children: [
                     { path: "", element: <Posts /> },
                     { path: "pets", element: <Pets /> },
+                    { path: "notices", element: <Notices /> },
                 ]
             },
             { path: "/pet/:petId", element: <PetDetail /> },
