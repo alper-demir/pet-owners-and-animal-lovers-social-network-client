@@ -41,6 +41,7 @@ const LostPetDetail = () => {
         setAge(lostPet.age)
         setGender(lostPet.gender)
         setBreed(lostPet.breed)
+        setCity(lostPet.city)
         setImage(lostPet.image)
         setColor(lostPet.color)
         setLastSeenLocation(lostPet.lastSeenLocation)
@@ -59,6 +60,7 @@ const LostPetDetail = () => {
     const [image, setImage] = useState();
     const [color, setColor] = useState();
     const [breed, setBreed] = useState();
+    const [city, setCity] = useState();
     const [lastSeenLocation, setLastSeenLocation] = useState();
     const [lastSeenDate, setLastSeenDate] = useState();
     const [lostStatus, setLostStatus] = useState();
@@ -69,9 +71,9 @@ const LostPetDetail = () => {
     const token = localStorage.getItem("token");
 
     const handleNoticeUpdate = async () => {
-        console.log(name, species, age, gender, image, color, breed, lastSeenDate, lastSeenLocation, lostStatus, contactEmail, contactPhoneNumber, description);
+        console.log(name, species, age, gender, image, color, breed, city, lastSeenDate, lastSeenLocation, lostStatus, contactEmail, contactPhoneNumber, description);
         const updatedOBJ = {
-            name, species, age, gender, image, color, breed, lastSeenDate, lastSeenLocation, lostStatus, contactEmail, contactPhoneNumber, description, userId: user
+            name, species, age, gender, image, color, breed, city, lastSeenDate, lastSeenLocation, lostStatus, contactEmail, contactPhoneNumber, description, userId: user
         }
         try {
             const updateNotice = await axios.put(`${URL}/lost-pet-notice/${id}`, updatedOBJ, { headers: { Authorization: token } })
@@ -107,6 +109,10 @@ const LostPetDetail = () => {
 
     const handleBreedChange = (event) => {
         setBreed(event.target.value)
+    };
+
+    const handleCityChange = (event) => {
+        setCity(event.target.value)
     };
 
     const handleLastSeenLocation = (event) => {
@@ -208,6 +214,10 @@ const LostPetDetail = () => {
                                     <div className="my-2">
                                         <label htmlFor="breed" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Breed</label>
                                         <input type="text" id="breed" value={breed} onChange={handleBreedChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 max-sm:p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                    </div>
+                                    <div className="my-2">
+                                        <label htmlFor="city" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">City</label>
+                                        <input type="text" id="city" value={city} onChange={handleCityChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 max-sm:p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                                     </div>
                                     <div className="my-2">
                                         <label htmlFor="lastSeenDate" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Last Seen Date</label>

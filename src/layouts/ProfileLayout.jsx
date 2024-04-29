@@ -4,7 +4,7 @@ import Links from '../components/profile/Links'
 import { useSelector } from 'react-redux'
 import "../components/profile/css/profile.css"
 import axios from 'axios'
-import { MdCreateNewFolder } from "react-icons/md";
+import { MdCreateNewFolder, MdCreate } from "react-icons/md";
 import { IoIosCreate } from "react-icons/io";
 import loading from "../asset/loading.gif"
 
@@ -12,6 +12,10 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { toast } from 'react-hot-toast';
+
+import CreatePost from '../components/profile/modals/CreatePost'
+import CreatePetProfile from '../components/profile/modals/CreatePetProfile'
+import CreateNotice from '../components/profile/modals/CreateNotice'
 
 const ProfileContext = createContext();
 
@@ -24,6 +28,7 @@ const ProfileLayout = () => {
     const [user, setUser] = useState({})
     const [posts, setPosts] = useState([])
     const [pets, setPets] = useState([])
+    const [notices, setNotices] = useState([])
     const [ownProfile, setOwnProfile] = useState();
     const [requestStatus, setRequestStatus] = useState();
     const [isStatusLoading, setIsStatusLoading] = useState(true);
@@ -74,6 +79,19 @@ const ProfileLayout = () => {
         }
     }
 
+    const getNotices = async () => {
+        try {
+            const notice = await axios.post(`${URL}/notices/${username}`, {}, { headers: { Authorization: token } })
+            if (notice) {
+                setNotices(notice.data.notices)
+                console.log(notice.data);
+            }
+        } catch (error) {
+            console.log(error);
+            navigate("/")
+        }
+    }
+
     const isUserInOwnProfile = () => {
         username === currentUser ? setOwnProfile(true) : setOwnProfile(false)
     }
@@ -82,6 +100,7 @@ const ProfileLayout = () => {
         getUserData();
         getPosts();
         getPetProfiles();
+        getNotices();
         isUserInOwnProfile();
         checkRequestStatus();
         checkProfileVisibility();
@@ -225,6 +244,9 @@ const ProfileLayout = () => {
         }
     };
 
+    const [openCreatePostModal, setOpenCreatePostModal] = useState(false);
+    const [openCreatePetProfileModal, setOpenCreatePetProfileModal] = useState(false);
+    const [openCreateNoticeModal, setOpenCreateNoticeModal] = useState(false);
 
     return (
         <div>
@@ -319,11 +341,27 @@ const ProfileLayout = () => {
                         <div className='border text-center my-2 rounded-xl py-2 font-semibold cursor-pointer dark:text-white dark:border-[#777777]' onClick={handleOpen}>
                             <button>Edit Profile</button>
                         </div>
-                        <div className='flex justify-evenly text-3xl max-sm:text-2xl items-center mt-5 text-gray-500 dark:text-white'>
-                            <div className='cursor-pointer hover:scale-125 duration-200'><IoIosCreate /></div>
-                            <div className='cursor-pointer hover:scale-125 duration-200'><MdCreateNewFolder /></div>
+                        <div className='flex justify-around text-3xl max-sm:text-2xl items-center mt-5 text-gray-500 dark:text-white'>
+                            <div className='cursor-pointer hover:scale-125 duration-200' onClick={() => setOpenCreatePostModal(true)}><IoIosCreate /></div>
+                            <div className='cursor-pointer hover:scale-125 duration-200' onClick={() => setOpenCreatePetProfileModal(true)}><MdCreateNewFolder /></div>
+                            <div className='cursor-pointer hover:scale-125 duration-200' onClick={() => setOpenCreateNoticeModal(true)}><MdCreate /></div>
                         </div>
                     </div>
+                }
+
+                {
+                    openCreatePostModal &&
+                    <CreatePost openCreatePostModal={openCreatePostModal} setOpenPostCreateModal={setOpenCreatePostModal} getPosts={getPosts} />
+                }
+
+                {
+                    openCreatePetProfileModal &&
+                    <CreatePetProfile openCreatePetProfileModal={openCreatePetProfileModal} setOpenCreatePetProfileModal={setOpenCreatePetProfileModal} getPetProfiles={getPetProfiles} />
+                }
+
+                {
+                    openCreateNoticeModal &&
+                    <CreateNotice openCreateNoticeModal={openCreateNoticeModal} setOpenCreateNoticeModal={setOpenCreateNoticeModal} />
                 }
 
                 {
@@ -351,7 +389,7 @@ const ProfileLayout = () => {
                             <>
                                 <Links username={username} />
 
-                                <ProfileContext.Provider value={{ posts, pets }}>
+                                <ProfileContext.Provider value={{ posts, pets, notices }}>
                                     <div className='mb-20 max-sm:mb-28'>
                                         <Outlet />
                                     </div>
