@@ -111,7 +111,7 @@ const ProfileLayout = () => {
     const checkRequestStatus = async () => {
         setIsStatusLoading(true)
         try {
-            const res = await axios.post(`${URL}/check-friend-request`, { senderId: userId, receiverUsername: username }, { headers: { Authorization: token } });
+            const res = await axios.post(`${URL}/check-follow-request`, { senderId: userId, receiverUsername: username }, { headers: { Authorization: token } });
             if (res) {
                 console.log(res.data);
                 setRequestStatus(res.data.status)
@@ -127,7 +127,7 @@ const ProfileLayout = () => {
         console.log(user._id);
         setIsStatusLoading(true)
         try {
-            const response = await axios.post(`${URL}/send-friend-request`, { senderId: userId, receiverId: user._id }, { headers: { Authorization: token } });
+            const response = await axios.post(`${URL}/send-follow-request`, { senderId: userId, receiverId: user._id }, { headers: { Authorization: token } });
             console.log(response);
             checkRequestStatus();
             setIsStatusLoading(false)
