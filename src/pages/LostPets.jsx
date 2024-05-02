@@ -11,7 +11,6 @@ const LostPets = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Kayıp hayvan ilanlarını API'den al
         const fetchLostPets = async () => {
             try {
                 const response = await axios.get(`${URL}/lost-pets?page=${currentPage}`);
@@ -39,12 +38,14 @@ const LostPets = () => {
     }
 
     return (
-        <div className="my-8 mb-20">
-            <h1 className="text-3xl max-sm:text-xl font-bold mb-4">Lost Pet Notices</h1>
+        <div className="my-8 mb-20 dark:text-white">
+            <div className='mt-3 mb-5 text-center text-lg max-sm:text-base font-bold dark:text-white'>
+                <h3>Lost Pet Notices</h3>
+            </div>
 
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                <table class="w-full text-xs rtl:text-right text-gray-500 dark:text-gray-400 text-center">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <table class="w-full text-xs rtl:text-right text-center">
+                    <thead class="text-xs odd:bg-white bg-gray-50 dark:bg-[#141414] border-b dark:border-[#777777]">
                         <tr>
                             <th scope="col" class="p-4">
                                 Profile
@@ -66,17 +67,17 @@ const LostPets = () => {
                     <tbody>
                         {
                             lostPets.map(pet => (
-                                <tr onClick={() => handleRowClick(pet._id)} key={pet._id} class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 cursor-pointer">
+                                <tr onClick={() => handleRowClick(pet._id)} key={pet._id} class="odd:bg-white odd:dark:bg-[#121212] even:bg-gray-50 even:dark:bg-[#141414] border-b dark:border-[#777777] cursor-pointer">
                                     <th scope="row" class="p-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         <div className='flex flex-col gap-y-1 items-center'>
                                             <div>
                                                 <img src={`${URL}/public/images/${pet.image}`} alt={pet.title} className="h-24 w-24 cursor-pointer group-hover:scale-95 duration-300 object-cover rounded-md max-sm:w-[4.5rem] max-sm:h-[4.5rem]" />
                                             </div>
                                             <div>
-                                                <Link to={`/lost-pets/${pet._id}`} className="text-blue-600 hover:underline">{pet.name}</Link> - <span className="text-gray-600">{pet.species}, {pet.color}</span>
+                                                <Link to={`/lost-pets/${pet._id}`} className="hover:underline">{pet.name}</Link> - <span>{pet.species}, {pet.color}</span>
                                             </div>
                                             <div>
-                                                by <Link to={`/${pet.createdBy.username}`}>@{pet.createdBy.username}</Link>
+                                                by <Link to={`/${pet.userId.username}`}>@{pet.userId.username}</Link>
                                             </div>
                                         </div>
                                     </th>
