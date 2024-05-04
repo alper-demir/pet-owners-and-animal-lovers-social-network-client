@@ -15,7 +15,7 @@ const Search = () => {
         const inputValue = e.target.value;
         setInput(inputValue);
         if (inputValue.length > 3) {
-            setLoading(true); // Loading durumunu true yap
+            setLoading(true);
             try {
                 const res = await axios.get(`${URL}/search?q=${input}`);
                 setResults(res.data);
@@ -23,7 +23,7 @@ const Search = () => {
                 console.error("Error fetching search results:", error);
                 setResults({});
             } finally {
-                setLoading(false); // İstek tamamlandıktan sonra loading durumunu false yap
+                setLoading(false);
             }
         } else {
             setResults({});

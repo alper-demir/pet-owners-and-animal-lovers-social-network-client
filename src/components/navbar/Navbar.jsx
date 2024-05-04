@@ -48,7 +48,7 @@ const Navbar = () => {
                         <NavLink to="/search" className='hover:bg-[#F5F5F5] dark:hover:bg-[#1C1C1C] py-[20px] px-[32px] rounded-md my-[4px] mx-[2px] transition-all duration-500 cursor-pointer active:scale-90 flex gap-x-1 items-center'>
                             <IoSearchOutline className="text-3xl" />
                         </NavLink>
-                        <NavLink to="/lost-pets" className='hover:bg-[#F5F5F5] dark:hover:bg-[#1C1C1C] py-[20px] px-[32px] rounded-md my-[4px] mx-[2px] cursor-pointer active:scale-90'>
+                        <NavLink to="/lost-pets" className='hover:bg-[#F5F5F5] dark:hover:bg-[#1C1C1C] py-[20px] px-[32px] rounded-md my-[4px] mx-[2px] transition-all duration-500 cursor-pointer active:scale-90 relative'>
                             <MdOutlinePostAdd className='text-3xl' title='Notices' />
                         </NavLink>
                         <NavLink to="/notifications" className='hover:bg-[#F5F5F5] dark:hover:bg-[#1C1C1C] py-[20px] px-[32px] rounded-md my-[4px] mx-[2px] transition-all duration-500 cursor-pointer active:scale-90 relative'>
