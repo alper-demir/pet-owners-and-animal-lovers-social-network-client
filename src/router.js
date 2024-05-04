@@ -12,6 +12,7 @@ import LostPets from "./pages/LostPets";
 import LostPetDetail from "./components/lost-pets/LostPetDetail";
 import Register from "./pages/Register";
 import Notices from "./pages/Notices";
+import Search from "./pages/Search";
 
 const router = createBrowserRouter([
     {
@@ -42,6 +43,7 @@ const router = createBrowserRouter([
             { path: "/notifications", element: <Notifications /> },
             { path: "/lost-pets", element: <LostPets /> },
             { path: "/lost-pet-notice/:id", element: <LostPetDetail /> },
+            { path: "/search", element: <Search /> },
         ]
     },
     { path: "*", element: "The page you are looking for is not found" }
