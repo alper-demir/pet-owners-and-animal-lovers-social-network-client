@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import axios from "axios";
 import { Link, useNavigate } from 'react-router-dom';
 import toast from "react-hot-toast";
@@ -35,18 +35,17 @@ const Login = () => {
         e.preventDefault();
         try {
             const response = await axios.post(`${URL}/login`, { email, password });
-            const { token } = response.data;
-            localStorage.setItem("token", token);
-            toast.success("Logged in successful");
-
-            navigate("/");
-        } catch (error) {
-            if (error.response && error.response.status === 401) {
-                // Eğer oturum geçersizse veya süresi dolmuşsa login sayfasına yönlendir
-                navigate("/login");
+            if (response.data.login) {
+                const { token } = response.data;
+                localStorage.setItem("token", token);
+                toast.success(response.data.message);
+                navigate("/");
             } else {
-                console.error("Error:", error.message);
+                toast.error(response.data.message);
             }
+
+        } catch (error) {
+            toast.error(error.message)
         }
     };
 
