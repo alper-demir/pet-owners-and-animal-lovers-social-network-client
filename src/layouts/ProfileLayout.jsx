@@ -16,6 +16,8 @@ import { toast } from 'react-hot-toast';
 import CreatePost from '../components/profile/modals/CreatePost'
 import CreatePetProfile from '../components/profile/modals/CreatePetProfile'
 import CreateNotice from '../components/profile/modals/CreateNotice'
+import Followers from '../components/profile/modals/Followers'
+import Followings from '../components/profile/modals/Followings'
 
 const ProfileContext = createContext();
 
@@ -29,12 +31,15 @@ const ProfileLayout = () => {
     const [posts, setPosts] = useState([])
     const [pets, setPets] = useState([])
     const [notices, setNotices] = useState([])
+    const [followers, setFollowers] = useState([])
+    const [followings, setFollowings] = useState([])
     const [ownProfile, setOwnProfile] = useState();
     const [requestStatus, setRequestStatus] = useState();
     const [isStatusLoading, setIsStatusLoading] = useState(true);
     const [isVisibilityLoading, setIsVisibilityLoading] = useState(true);
     const [profileVisibility, setProfileVisibility] = useState(true);
     const [status, setStatus] = useState({})
+    const [profileId, setProfileId] = useState("");
 
     const token = localStorage.getItem("token");
     const URL = process.env.REACT_APP_BASE_URL;
@@ -44,8 +49,10 @@ const ProfileLayout = () => {
             const userData = await axios.post(`${URL}/user-data/${username}`, {}, { headers: { Authorization: token } })
             if (userData) {
                 setUser(userData.data.user)
+                setFollowers(userData.data.user.followers)
+                setFollowings(userData.data.user.followings)
+                setProfileId(userData.data.user._id)
                 console.log(userData.data.user);
-
             }
         } catch (error) {
             console.log(error);
@@ -247,6 +254,8 @@ const ProfileLayout = () => {
     const [openCreatePostModal, setOpenCreatePostModal] = useState(false);
     const [openCreatePetProfileModal, setOpenCreatePetProfileModal] = useState(false);
     const [openCreateNoticeModal, setOpenCreateNoticeModal] = useState(false);
+    const [openFollowingsModal, setOpenFollowingsModal] = useState(false);
+    const [openFollowersModal, setOpenFollowersModal] = useState(false);
 
     return (
         <div>
@@ -262,7 +271,7 @@ const ProfileLayout = () => {
                         Edit Profile
                     </Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }} >
-                        <div className='border-b-2'>
+                        <div className='border-b-2 border-gray-200 dark:border-opacity-20'>
                             <div className='py-4'>
                                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Profile Picture</label>
                                 <div className='flex gap-x-10 max-sm:gap-x-4 items-center max-sm:justify-between'>
@@ -325,15 +334,26 @@ const ProfileLayout = () => {
                 </div>
             </div>
 
-            <div className="flex justify-between my-2 max-sm:px-2">
-                <div className="flex gap-x-2 items-center text-[#A7A7A7] dark:text-[#777777]">
+            <div className="flex justify-between my-2 max-sm:px-2 dark:text-white text-xs">
+                <div className="flex gap-x-2 items-center">
                     <div className="hover:underline cursor-pointer">{posts.length} posts</div>
                     <div>-</div>
-                    <div className="hover:underline cursor-pointer">152 takipçi</div>
+                    <div onClick={() => setOpenFollowersModal(true)} className="hover:underline cursor-pointer">{followers ? (<>{followers.length}</>) : (<>0</>)} followers</div>
+                    <div>-</div>
+                    <div onClick={() => setOpenFollowingsModal(true)} className="hover:underline cursor-pointer">{followings ? (<>{followings.length}</>) : (<>0</>)} followings</div>
                     <div>-</div>
                     <div className="hover:underline cursor-pointer">owns {pets.length} pet </div>
                 </div>
             </div>
+
+            {
+                openFollowersModal &&
+                <Followers openFollowersModal={openFollowersModal} setOpenFollowersModal={setOpenFollowersModal} profileId={profileId} />
+            }
+            {
+                openFollowingsModal &&
+                <Followings openFollowingsModal={openFollowingsModal} setOpenFollowingsModal={setOpenFollowingsModal} profileId={profileId} />
+            }
 
             <div>
                 {ownProfile &&
@@ -413,6 +433,6 @@ const ProfileLayout = () => {
 
 const usePostsContext = () => useContext(ProfileContext);
 
-export { usePostsContext }; // Diğer bileşenlerde context'i kullanabilmek için dışa aktarın
+export { usePostsContext };
 
 export default ProfileLayout;
