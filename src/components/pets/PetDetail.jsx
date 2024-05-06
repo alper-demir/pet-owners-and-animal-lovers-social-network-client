@@ -9,7 +9,7 @@ const PetDetail = () => {
     const [pet, setPet] = useState({});
     const { petId } = useParams();
 
-    const URL = "http://localhost:3001"
+    const URL = process.env.REACT_APP_BASE_URL;
     const token = localStorage.getItem("token");
     const navigate = useNavigate();
 

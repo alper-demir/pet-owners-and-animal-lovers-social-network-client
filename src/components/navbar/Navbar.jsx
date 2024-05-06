@@ -11,7 +11,7 @@ import SettingsDropDown from './SettingsDropDown';
 const Navbar = () => {
     const { username } = useSelector(state => state.user.user)
 
-    const URL = "http://localhost:3001"
+    const URL = process.env.REACT_APP_BASE_URL;
     const receiverId = useSelector(state => state.user.user.userId);
 
     const [numberOfRequest, setNumberOfRequest] = useState([]);

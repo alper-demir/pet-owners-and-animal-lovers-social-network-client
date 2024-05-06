@@ -7,7 +7,7 @@ import loadingGIF from "../asset/loading.gif"
 
 const Notifications = () => {
 
-  const URL = "http://localhost:3001"
+  const URL = process.env.REACT_APP_BASE_URL;
   const token = localStorage.getItem("token");
   const receiverId = useSelector(state => state.user.user.userId);
 

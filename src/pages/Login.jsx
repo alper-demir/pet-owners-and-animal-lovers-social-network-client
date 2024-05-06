@@ -12,7 +12,7 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [buttonEnabled, setButtonEnabled] = useState(false);
 
-    const URL = "http://localhost:3001";
+    const URL = process.env.REACT_APP_BASE_URL;
     const { isLoading } = useFetch();
 
     useEffect(() => {

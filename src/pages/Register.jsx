@@ -11,7 +11,7 @@ const Register = () => {
     const [lastName, setLastName] = useState("");
     const [username, setUsername] = useState("");
 
-    const URL = "http://localhost:3001"
+    const URL = process.env.REACT_APP_BASE_URL;
     const navigate = useNavigate();
 
     const handleRegister = async (e) => {

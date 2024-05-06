@@ -37,7 +37,7 @@ const ProfileLayout = () => {
     const [status, setStatus] = useState({})
 
     const token = localStorage.getItem("token");
-    const URL = "http://localhost:3001"
+    const URL = process.env.REACT_APP_BASE_URL;
 
     const getUserData = async () => {
         try {

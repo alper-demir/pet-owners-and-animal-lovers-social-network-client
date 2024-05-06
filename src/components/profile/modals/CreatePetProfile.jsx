@@ -27,7 +27,7 @@ const CreatePetProfile = ({ openCreatePetProfileModal, setOpenCreatePetProfileMo
     };
 
     const token = localStorage.getItem("token");
-    const BASE_URL = "http://localhost:3001";
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
 
     const fileInputRef = useRef(null);
 

@@ -4,7 +4,7 @@ import { usePostsContext } from '../layouts/ProfileLayout';
 const Notices = () => {
 
   const { notices } = usePostsContext();
-  const URL = "http://localhost:3001"
+  const URL = process.env.REACT_APP_BASE_URL;
 
   return (
     <div className="flex flex-wrap gap-2 dark:text-white">

@@ -7,7 +7,7 @@ const LostPets = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
 
-    const URL = "http://localhost:3001"
+    const URL = process.env.REACT_APP_BASE_URL;
     const navigate = useNavigate();
 
     useEffect(() => {

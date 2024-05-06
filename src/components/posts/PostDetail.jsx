@@ -22,7 +22,7 @@ const PostDetail = () => {
     const [currentUserLikedPost, setCurrentUserLikedPost] = useState(false);
 
 
-    const URL = "http://localhost:3001"
+    const URL = process.env.REACT_APP_BASE_URL;
     const token = localStorage.getItem("token");
     const navigate = useNavigate();
     const ref = useRef();

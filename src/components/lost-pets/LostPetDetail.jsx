@@ -14,7 +14,7 @@ const LostPetDetail = () => {
     const [lostPet, setLostPet] = useState();
     const [loading, setLoading] = useState(false)
 
-    const BASE_URL = "http://localhost:3001"
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
     const fileInputRef = useRef(null);
 
     const fetchLostPet = async () => {

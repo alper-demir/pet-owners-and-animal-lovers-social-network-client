@@ -6,7 +6,7 @@ import loadingGIF from "../asset/loading.gif"
 
 const Search = () => {
 
-    const URL = "http://localhost:3001";
+    const URL = process.env.REACT_APP_BASE_URL;
     const [input, setInput] = useState("");
     const [results, setResults] = useState({});
     const [loading, setLoading] = useState(false);

@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const App = () => {
-  const URL = "http://localhost:3001";
+  const URL = process.env.REACT_APP_BASE_URL;
   const userid = useSelector(state => state.user.user.userId);
   const { user } = useSelector((state) => state.user);
 
