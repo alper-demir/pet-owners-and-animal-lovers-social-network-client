@@ -313,7 +313,7 @@ const PetDetail = () => {
                             <input type="date" id="birthDate" value={new Date(birthDate).toLocaleDateString('en-CA')} onChange={handleBirthDateChange} className="bg-gray-50 border border-gray-300 dark:border-[#777777] dark:border-opacity-30 text-sm rounded-lg w-full p-2.5 max-sm:p-2 dark:bg-transparent" />
                         </div>
                         <div className="flex justify-end bg-white dark:bg-transparent my-3">
-                            <button type="button" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:focus:ring-yellow-900" onClick={handlepetProfileUpdate}>Edit Notice</button>
+                            <button type="button" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:focus:ring-yellow-900" onClick={handlepetProfileUpdate}>Edit Pet Profile</button>
                         </div>
                         <div className="flex justify-end bg-white dark:bg-transparent my-3">
                             <button type="button" class="focus:outline-none text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:focus:ring-red-900" onClick={handleDeletePetProfile}>Delete Pet Profile</button>
