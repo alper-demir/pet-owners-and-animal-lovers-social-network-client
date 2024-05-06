@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import loadingGIF from "../../asset/loading.gif"
 import { useSelector } from 'react-redux';
-
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
@@ -16,7 +15,8 @@ const LostPetDetail = () => {
 
     const BASE_URL = process.env.REACT_APP_BASE_URL;
     const fileInputRef = useRef(null);
-
+    const navigate = useNavigate();
+    const { username } = useSelector(state => state.user.user)
     const fetchLostPet = async () => {
         setLoading(true)
         try {
@@ -179,6 +179,23 @@ const LostPetDetail = () => {
         file ? setPreviewImage(URL.createObjectURL(file)) : setPreviewImage(null);
     };
 
+    const handleDeleteNotice = async () => {
+        const deleteConfirm = window.confirm("Are you sure delete this notice?");
+        if (deleteConfirm) {
+            try {
+                const deleteNotice = await axios.delete(`${BASE_URL}/delete-notice/${id}`, { headers: { Authorization: token } });
+                if (deleteNotice.data.status) {
+                    handleClose();
+                    navigate(`/${username}/notices`)
+                    toast.success(deleteNotice.data.message);
+                } else {
+                    toast.error(deleteNotice.data.message);
+                }
+            } catch (error) {
+                toast.error(error.message)
+            }
+        }
+    }
 
     return (
         <div className="container mx-auto dark:text-white">
@@ -421,6 +438,9 @@ const LostPetDetail = () => {
                                     </div>
                                     <div className="flex justify-end bg-white dark:bg-transparent my-3">
                                         <button type="button" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:focus:ring-yellow-900" onClick={handleNoticeUpdate}>Edit Notice</button>
+                                    </div>
+                                    <div className="flex justify-end bg-white dark:bg-transparent my-3">
+                                        <button type="button" class="focus:outline-none text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:focus:ring-red-900" onClick={handleDeleteNotice}>Delete Notice</button>
                                     </div>
                                 </Typography>
                             </Box>

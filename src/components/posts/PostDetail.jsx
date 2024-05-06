@@ -26,7 +26,8 @@ const PostDetail = () => {
     const token = localStorage.getItem("token");
     const navigate = useNavigate();
     const ref = useRef();
-    const userId = useSelector(state => state.user.user.userId)
+    const { userId } = useSelector(state => state.user.user)
+    const { username } = useSelector(state => state.user.user)
 
     const getPostData = async () => {
         try {
@@ -70,7 +71,6 @@ const PostDetail = () => {
         }
     }
 
-
     const shareComment = async () => {
         if (comment.length > 0) {
             setIsCommentLoading(true)
@@ -98,6 +98,51 @@ const PostDetail = () => {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    const [openEditModal, setOpenEditModal] = useState(false);
+    const handleOpenEditModal = () => {
+        setOpenEditModal(true)
+        setContent(post.content)
+    }
+    const handleCloseEditModal = () => setOpenEditModal(false);
+
+    const [content, setContent] = useState();
+    const handleContentChange = (event) => {
+        setContent(event.target.value)
+    };
+
+    const handleEditPost = async () => {
+        try {
+            const editPost = await axios.put(`${URL}/update-post/${postId}`, { content }, { headers: { Authorization: token } });
+            if (editPost.data.status) {
+                handleCloseEditModal();
+                getPostData();
+                toast.success(editPost.data.message);
+            } else {
+                toast.error(editPost.data.message);
+            }
+        } catch (error) {
+            toast.error(error.message)
+        }
+    }
+
+    const handleDeletePost = async () => {
+        const deleteConfirm = window.confirm("Are you sure delete this post?");
+        if (deleteConfirm) {
+            try {
+                const deletePost = await axios.delete(`${URL}/delete-post/${postId}`, { headers: { Authorization: token } });
+                if (deletePost.data.status) {
+                    handleCloseEditModal();
+                    navigate(`/${username}`)
+                    toast.success(deletePost.data.message);
+                } else {
+                    toast.error(deletePost.data.message);
+                }
+            } catch (error) {
+                toast.error(error.message)
+            }
+        }
+    }
 
     return (
         <>
@@ -144,9 +189,11 @@ const PostDetail = () => {
 
                                 </div>
 
-                                <div className="my-2">{post.content}</div>
+                                {post.content &&
+                                    <div className="my-2">{post.content}</div>
+                                }
 
-                                <div>
+                                <div className="mt-1">
                                     <img src={`${URL}/public/images/${post.image}`} className="rounded-md object-cover" alt="img" />
                                 </div>
                                 {/* icons */}
@@ -163,6 +210,13 @@ const PostDetail = () => {
                                     <span onClick={showComments} className="hover:underline underline-offset-2 cursor-pointer">{post.comments.length} comments</span>
                                     <span>&nbsp;·&nbsp;</span>
                                     <span onClick={handleOpen} className="hover:underline underline-offset-2 cursor-pointer">{post.likes.length} likes</span>
+                                    {
+                                        userId === post.userId._id &&
+                                        <>
+                                            <span>&nbsp;·&nbsp;</span>
+                                            <span onClick={handleOpenEditModal} className="hover:underline underline-offset-2 cursor-pointer">Edit</span>
+                                        </>
+                                    }
                                 </div>
 
                             </div>
@@ -261,6 +315,32 @@ const PostDetail = () => {
                                 </div>
                             ))
                         }
+                    </Typography>
+                </Box>
+            </Modal>
+
+            <Modal
+                open={openEditModal}
+                onClose={handleCloseEditModal}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/4 max-xl:w-3/5 max-md:w-4/5 p-4 outline-indigo-400 bg-white dark:bg-[#101010] dark:text-white max-h-80 overflow-y-auto rounded-md">
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Edit Post
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }} >
+
+                        <div className="my-2">
+                            <label htmlFor="content" className="block mb-2 text-sm font-medium">Content</label>
+                            <textarea type="text" id="content" rows="3" value={content} onChange={handleContentChange} className="bg-gray-50 border border-gray-300 dark:border-[#777777] dark:border-opacity-30 text-sm rounded-lg w-full p-2.5 max-sm:p-2 dark:bg-transparent resize-none outline-none" />
+                        </div>
+                        <div className="flex justify-end bg-white dark:bg-transparent my-3">
+                            <button type="button" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:focus:ring-yellow-900" onClick={handleEditPost}>Edit Post</button>
+                        </div>
+                        <div className="flex justify-end bg-white dark:bg-transparent my-3">
+                            <button type="button" class="focus:outline-none text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:focus:ring-red-900" onClick={handleDeletePost}>Delete Post</button>
+                        </div>
                     </Typography>
                 </Box>
             </Modal>
