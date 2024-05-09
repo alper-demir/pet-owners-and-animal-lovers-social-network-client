@@ -2,8 +2,8 @@ import { useEffect, useState } from "react"
 import axios from "axios";
 import { Link, useNavigate } from 'react-router-dom';
 import toast from "react-hot-toast";
-import useFetch from "../helpers/useFetch";
-import loading from "../asset/loading.gif"
+import useFetch from "../../helpers/useFetch";
+import loading from "../../asset/loading.gif"
 
 const Login = () => {
 
@@ -75,7 +75,7 @@ const Login = () => {
                                     <span>Not registered? <Link to="/register" className="text-blue-700 hover:underline dark:text-blue-500 underline-offset-2">Create account</Link></span>
                                 </div>
                                 <div>
-                                    <span className="hover:underline cursor-pointer underline-offset-2 text-blue-700">I forgot my password</span>
+                                    <Link to="/reset-password" className="hover:underline cursor-pointer underline-offset-2 text-blue-700">I forgot my password</Link>
                                 </div>
                             </div>
                         </form>

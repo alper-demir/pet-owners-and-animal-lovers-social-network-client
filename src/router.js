@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom"
 import App from "./App";
-import Login from './pages/Login';
+import Login from './pages/Auth/Login';
 import Posts from './pages/Posts';
 import MainLayout from "./layouts/MainLayout";
 import ProfileLayout from "./layouts/ProfileLayout";
@@ -10,9 +10,12 @@ import PostDetail from "./components/posts/PostDetail";
 import Notifications from "./pages/Notifications";
 import LostPets from "./pages/LostPets";
 import LostPetDetail from "./components/lost-pets/LostPetDetail";
-import Register from "./pages/Register";
+import Register from "./pages/Auth/Register";
 import Notices from "./pages/Notices";
 import Search from "./pages/Search";
+import About from "./pages/About";
+import ForgotPassword from "./pages/Auth/ForgotPassword";
+import ResetPassword from "./pages/Auth/ResetPassword";
 
 const router = createBrowserRouter([
     {
@@ -22,6 +25,13 @@ const router = createBrowserRouter([
     {
         path: "register",
         element: <Register />
+    },
+    {
+        path: "reset-password",
+        children: [
+            { path: "", element: <ForgotPassword /> },
+            { path: ":token/:id", element: <ResetPassword /> },
+        ]
     },
     {
         path: "",
@@ -44,6 +54,7 @@ const router = createBrowserRouter([
             { path: "/lost-pets", element: <LostPets /> },
             { path: "/lost-pet-notice/:id", element: <LostPetDetail /> },
             { path: "/search", element: <Search /> },
+            { path: "/about", element: <About /> },
         ]
     },
     { path: "*", element: "The page you are looking for is not found" }
