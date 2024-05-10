@@ -194,7 +194,7 @@ const PostDetail = () => {
                                 }
 
                                 <div className="mt-1">
-                                    <img src={`${URL}/public/images/${post.image}`} className="rounded-md object-cover" alt="img" />
+                                    <img src={`${URL}/public/images/${post.image}`} className="rounded-md object-cover w-full" alt="img" />
                                 </div>
                                 {/* icons */}
                                 <div className='flex gap-1 -ml-2'>
