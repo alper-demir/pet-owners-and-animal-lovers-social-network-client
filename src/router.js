@@ -16,6 +16,7 @@ import About from "./pages/About";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import ResetPassword from "./pages/Auth/ResetPassword";
 import Home from "./pages/Home";
+import Terms from "./pages/Terms";
 
 const router = createBrowserRouter([
     {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
     {
         path: "register",
         element: <Register />
+    },
+    {
+        path: "terms",
+        element: <Terms />
     },
     {
         path: "reset-password",

@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import toast from "react-hot-toast";
 import useFetch from "../../helpers/useFetch";
 import loading from "../../asset/loading.gif"
+import { MdOutlinePets, MdVisibility, MdVisibilityOff } from 'react-icons/md';
+import "./auth.css"
 
 const Login = () => {
 
@@ -11,6 +13,7 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [buttonEnabled, setButtonEnabled] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const URL = process.env.REACT_APP_BASE_URL;
     const { isLoading } = useFetch();
@@ -50,21 +53,31 @@ const Login = () => {
     };
 
     return (
-        <div>
+        <div className="h-screen bg-img">
             {isLoading ? (
                 <div className="flex justify-center items-center mt-20"> <img src={loading} alt="" className="w-16 h-16" /> </div>
             ) : (
-                <>
+                <div>
+                    <div className="flex justify-center flex-col items-center pt-4 font-bold text-white">
+                        <MdOutlinePets className='text-5xl' title='POALSNet' />
+                        <span className="text-xl">POALSNet</span>
+                    </div>
                     <div className="fixed top-1/4 w-full max-sm:p-4">
-                        <form className="max-w-md mx-auto border p-8 text-sm rounded-lg shadow-md" onSubmit={handleLogin}>
+                        <form className="max-w-md mx-auto border p-8 text-sm rounded-lg shadow-md bg-white bg-opacity-10 backdrop-blur-2xl text-gray-900 max-sm:text-white" onSubmit={handleLogin}>
+                            <div className="text-center mb-4">
+                                <span className="font-semibold text-lg">Login</span>
+                            </div>
                             <div className="relative z-0 w-full mb-5 group">
-                                <input type="email" name="floating_email" id="floating_email" className="block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required onChange={handleEmail} />
-                                <label htmlFor="floating_email" className="peer-focus:font-medium absolute dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Email address</label>
+                                <input type="email" name="floating_email" id="floating_email" className="block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 appearance-none border-white focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required onChange={handleEmail} />
+                                <label htmlFor="floating_email" className="peer-focus:font-medium absolute font-semibold duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Email address</label>
                             </div>
 
                             <div className="relative z-0 w-full mb-5 group">
-                                <input type="password" name="floating_password" id="floating_password" className="block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required onChange={handlePassword} />
-                                <label htmlFor="floating_password" className="peer-focus:font-medium absolute dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Password</label>
+                                <input type={showPassword ? "text" : "password"} name="floating_password" id="floating_password" className="block py-2.5 px-0 w-full text-gray-900 bg-transparent border-0 border-b-2 appearance-none border-white focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required onChange={handlePassword} />
+                                <label htmlFor="floating_password" className="peer-focus:font-medium absolute font-semibold duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Password</label>
+                                <div className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-lg" onClick={() => setShowPassword(!showPassword)}>
+                                    {showPassword ? <MdVisibility /> : <MdVisibilityOff />}
+                                </div>
                             </div>
 
                             <div className="flex justify-end my-2">
@@ -80,7 +93,7 @@ const Login = () => {
                             </div>
                         </form>
                     </div>
-                </>
+                </div>
             )}
         </div>
     )
