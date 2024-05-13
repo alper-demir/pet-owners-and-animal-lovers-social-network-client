@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import { MdDeleteForever, MdModeEditOutline } from "react-icons/md";
 
 const PostDetail = () => {
 
@@ -99,6 +100,10 @@ const PostDetail = () => {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
+    const [openEditCommentModal, setOpenEditCommentModal] = useState(false);
+    const handleOpenEditCommentModal = () => setOpenEditCommentModal(true);
+    const handleCloseEditComment = () => setOpenEditCommentModal(false);
+
     const [openEditModal, setOpenEditModal] = useState(false);
     const handleOpenEditModal = () => {
         setOpenEditModal(true)
@@ -143,6 +148,46 @@ const PostDetail = () => {
             }
         }
     }
+    const [editCommentText, setEditCommentText] = useState("");
+    const [editedCommentId, setEditedCommentId] = useState("");
+
+    const editCommentModal = (id, content) => {
+        setEditCommentText(content)
+        setEditedCommentId(id);
+        handleOpenEditCommentModal();
+    }
+
+    const handleEditComment = async () => {
+        try {
+            const editComment = await axios.post(`${URL}/edit-comment/${editedCommentId}`, { content: editCommentText }, { headers: { Authorization: token } });
+            if (editComment.data.status === "success") {
+                toast.success(editComment.data.message);
+                getPostData();
+                handleCloseEditComment();
+            } else {
+                toast.error(editComment.data.message);
+            }
+        } catch (error) {
+            toast.error(error.message);
+        }
+    }
+
+    const deleteComment = async (id) => {
+        const deleteConf = window.confirm("Are you sure to delete this comment?");
+        if (deleteConf) {
+            try {
+                const deleteComment = await axios.post(`${URL}/delete-comment/${id}`, { postId }, { headers: { Authorization: token } });
+                if (deleteComment.data.status === "success") {
+                    toast.success(deleteComment.data.message);
+                    getPostData();
+                } else {
+                    toast.error(deleteComment.data.message);
+                }
+            } catch (error) {
+                toast.error(error.message);
+            }
+        }
+    };
 
     return (
         <>
@@ -263,6 +308,15 @@ const PostDetail = () => {
                                                 {comment.content}
                                             </div>
 
+                                            {
+                                                userId === post.userId._id &&
+                                                <>
+                                                    <div className="flex gap-x-2 justify-end">
+                                                        <div className="text-xl cursor-pointer" onClick={() => deleteComment(comment._id)}><MdDeleteForever /></div>
+                                                        <div className="text-xl cursor-pointer" onClick={() => editCommentModal(comment._id, comment.content)}><MdModeEditOutline /></div>
+                                                    </div>
+                                                </>
+                                            }
 
                                         </div>
                                     ))
@@ -295,7 +349,7 @@ const PostDetail = () => {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Box className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/5 max-xl:w-2/5 max-md:w-3/5 p-4 outline-indigo-400 bg-white dark:bg-[#101010] dark:text-white max-h-80 overflow-y-auto rounded-md">
+                <Box className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/5 max-xl:w-2/5 max-md:w-3/5 p-4 bg-white dark:bg-[#101010] dark:text-white max-h-80 overflow-y-auto rounded-md">
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         Likes
                     </Typography>
@@ -325,7 +379,7 @@ const PostDetail = () => {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Box className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/4 max-xl:w-3/5 max-md:w-4/5 p-4 outline-indigo-400 bg-white dark:bg-[#101010] dark:text-white max-h-80 overflow-y-auto rounded-md">
+                <Box className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/4 max-xl:w-3/5 max-md:w-4/5 p-4 bg-white dark:bg-[#101010] dark:text-white max-h-80 overflow-y-auto rounded-md">
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         Edit Post
                     </Typography>
@@ -340,6 +394,28 @@ const PostDetail = () => {
                         </div>
                         <div className="flex justify-end bg-white dark:bg-transparent my-3">
                             <button type="button" class="focus:outline-none text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:focus:ring-red-900" onClick={handleDeletePost}>Delete Post</button>
+                        </div>
+                    </Typography>
+                </Box>
+            </Modal>
+            <Modal
+                open={openEditCommentModal}
+                onClose={handleCloseEditComment}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/5 max-xl:w-2/5 max-md:w-3/5 p-4 bg-white dark:bg-[#101010] dark:text-white max-h-80 overflow-y-auto rounded-md">
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Edit Comment
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }} >
+
+                        <div className="my-2">
+                            <label htmlFor="comment" className="block mb-2 text-sm font-medium">Comment</label>
+                            <textarea type="text" id="comment" rows="3" value={editCommentText} onChange={(e) => setEditCommentText(e.target.value)} className="bg-gray-50 border border-gray-300 dark:border-[#777777] dark:border-opacity-30 text-sm rounded-lg w-full p-2.5 max-sm:p-2 dark:bg-transparent resize-none outline-none" />
+                        </div>
+                        <div className="flex justify-end bg-white dark:bg-transparent my-3">
+                            <button type="button" class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:focus:ring-yellow-900" onClick={handleEditComment}>Edit Comment</button>
                         </div>
                     </Typography>
                 </Box>
