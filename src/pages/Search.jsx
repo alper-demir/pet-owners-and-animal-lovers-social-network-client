@@ -189,7 +189,7 @@ const Search = () => {
                                                                 className="w-12 h-12 rounded-full object-cover"
                                                             />
                                                         </div>
-                                                        <div>{notice.name}</div>
+                                                        <div className="text-center">{notice.name}</div>
                                                     </div>
                                                     <div>{notice.description}</div>
                                                 </Link>
