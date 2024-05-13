@@ -17,6 +17,8 @@ import ForgotPassword from "./pages/Auth/ForgotPassword";
 import ResetPassword from "./pages/Auth/ResetPassword";
 import Home from "./pages/Home";
 import Terms from "./pages/Terms";
+import AnimalProtectionDayCountdown from "./pages/AnimalProtectionDayCountDown";
+import AnimalCharities from "./pages/AnimalCharities";
 
 const router = createBrowserRouter([
     {
@@ -60,6 +62,8 @@ const router = createBrowserRouter([
             { path: "/lost-pet-notice/:id", element: <LostPetDetail /> },
             { path: "/search", element: <Search /> },
             { path: "/about", element: <About /> },
+            { path: "/animal-protection-day-count-down", element: <AnimalProtectionDayCountdown /> },
+            { path: "/animal-charities", element: <AnimalCharities /> },
         ]
     },
     { path: "*", element: "The page you are looking for is not found" }
