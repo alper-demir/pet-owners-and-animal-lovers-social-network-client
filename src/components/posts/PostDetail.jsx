@@ -8,7 +8,8 @@ import { useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import { MdDeleteForever, MdModeEditOutline } from "react-icons/md";
+import { MdDeleteForever, MdModeEditOutline, MdOutlinePets } from "react-icons/md";
+import { FaRegComment } from "react-icons/fa";
 
 const PostDetail = () => {
 
@@ -244,10 +245,10 @@ const PostDetail = () => {
                                 {/* icons */}
                                 <div className='flex gap-1 -ml-2'>
                                     <div onClick={likePost} className='hover:bg-[#F5F5F5] dark:hover:bg-[#1E1E1E] p-2 rounded-full transition-colors duration-200 cursor-pointer'>
-                                        <svg aria-label="Beğen" class="x1lliihq x1n2onr6 dark:text-white" color="rgb(0, 0, 0)" fill={currentUserLikedPost ? "red" : "transparent"} height="19" role="img" viewBox="0 0 24 22" width="20"><title>Like</title><path d="M1 7.66c0 4.575 3.899 9.086 9.987 12.934.338.203.74.406 1.013.406.283 0 .686-.203 1.013-.406C19.1 16.746 23 12.234 23 7.66 23 3.736 20.245 1 16.672 1 14.603 1 12.98 1.94 12 3.352 11.042 1.952 9.408 1 7.328 1 3.766 1 1 3.736 1 7.66Z" stroke="currentColor" stroke-width="2"></path></svg>
+                                        <MdOutlinePets className={`text-2xl ${currentUserLikedPost ? "text-indigo-500" : ""}`} title='Like' />
                                     </div>
-                                    <div className='hover:bg-[#F5F5F5] dark:hover:bg-[#1E1E1E] p-2 rounded-full transition-colors duration-200 cursor-pointer' onClick={() => ref.current.focus()}>
-                                        <svg aria-label="Yorum Yap" class="x1lliihq x1n2onr6 dark:text-white" color="rgb(0, 0, 0)" fill="rgb(0, 0, 0)" height="20" role="img" viewBox="0 0 24 24" width="20"><title>Comment</title><path d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path></svg>
+                                    <div className='hover:bg-[#F5F5F5] dark:hover:bg-[#1E1E1E] p-2 rounded-full transition-colors duration-200 cursor-pointer text-2xl' onClick={() => ref.current.focus()}>
+                                        <FaRegComment />
                                     </div>
                                 </div>
 
@@ -265,6 +266,8 @@ const PostDetail = () => {
                                 </div>
 
                             </div>
+
+                            {/*Comments*/}
                             <div className="overflow-y-auto max-h-96">
                                 {
                                     showComment &&
@@ -322,9 +325,6 @@ const PostDetail = () => {
                                     ))
                                 }
                             </div>
-
-
-
 
                         </div>
 
