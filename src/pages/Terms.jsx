@@ -1,9 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Terms = () => {
     return (
         <div className="max-w-3xl mx-auto mt-8 px-4">
             <h2 className="text-2xl font-bold mb-4 text-center">Terms and Policies</h2>
+            <div className='text-center'>
+                <Link to="/" className="text-xl font-bold mb-4 underline underline-offset-2">POALSNet</Link>
+            </div>
             <p className="text-sm text-gray-700 mb-4 text-center mt-10">
                 By signing up for POALSNet, you agree to abide by the following terms and policies:
             </p>
