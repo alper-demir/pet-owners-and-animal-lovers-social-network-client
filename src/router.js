@@ -20,6 +20,8 @@ import Terms from "./pages/Terms";
 import AnimalProtectionDayCountdown from "./pages/AnimalProtectionDayCountDown";
 import AnimalCharities from "./pages/AnimalCharities";
 import ConfirmAccount from "./pages/Auth/ConfirmAccount";
+import DiscussionForum from "./pages/DiscussionForum";
+import DiscussionDetail from "./components/discussion/DiscussionDetail";
 
 const router = createBrowserRouter([
     {
@@ -68,6 +70,8 @@ const router = createBrowserRouter([
             { path: "/about", element: <About /> },
             { path: "/animal-protection-day-count-down", element: <AnimalProtectionDayCountdown /> },
             { path: "/animal-charities", element: <AnimalCharities /> },
+            { path: "/discussion-forum", element: <DiscussionForum /> },
+            { path: "/discussion/:id", element: <DiscussionDetail /> },
         ]
     },
     { path: "*", element: "The page you are looking for is not found" }
