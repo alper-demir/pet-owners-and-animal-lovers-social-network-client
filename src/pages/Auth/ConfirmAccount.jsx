@@ -28,9 +28,11 @@ const ConfirmAccount = () => {
                 }
                 else if (verifyEmail.data.status === "warning") {
                     toast.error(verifyEmail.data.message, { duration: 4000 });
+                    navigate("/login");
                 }
                 else {
                     toast.error(verifyEmail.data.error, { duration: 4000 });
+                    navigate("/login");
                 }
             }
             setLoading(false)
@@ -45,18 +47,19 @@ const ConfirmAccount = () => {
     }, [])
 
     return (
-        <div>
+        <>
             {
                 loading ? (
                     <div className='flex justify-center items-center mt-20'><img src={loadingGIF} alt="Loading.." className='w-10 h-10' /></div>
                 ) :
                     (
-                        <div className="fixed top-1/4 w-full max-sm:p-4">
-                            ACOUNT CONFIRM PAGE
+                        <div className="flex justify-center mt-10 flex-col text-center">
+                            <span className='font-semibold'>Account Verify</span>
+                            <span>You can close this page.</span>
                         </div>
                     )
             }
-        </div>
+        </>
     )
 }
 
