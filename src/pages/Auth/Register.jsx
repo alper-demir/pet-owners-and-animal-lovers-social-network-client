@@ -44,7 +44,7 @@ const Register = () => {
             if (register.data.status === "error") {
                 toast.error(register.data.message)
             } else {
-                toast.success(register.data.message)
+                toast.success(register.data.message, { duration: 5000 })
                 navigate("/login")
             }
         }
