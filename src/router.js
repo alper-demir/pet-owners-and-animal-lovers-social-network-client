@@ -19,6 +19,7 @@ import Home from "./pages/Home";
 import Terms from "./pages/Terms";
 import AnimalProtectionDayCountdown from "./pages/AnimalProtectionDayCountDown";
 import AnimalCharities from "./pages/AnimalCharities";
+import ConfirmAccount from "./pages/Auth/ConfirmAccount";
 
 const router = createBrowserRouter([
     {
@@ -39,6 +40,9 @@ const router = createBrowserRouter([
             { path: "", element: <ForgotPassword /> },
             { path: ":token/:id", element: <ResetPassword /> },
         ]
+    },
+    {
+        path: "confirm-account/:token/:id", element: <ConfirmAccount />
     },
     {
         path: "",
