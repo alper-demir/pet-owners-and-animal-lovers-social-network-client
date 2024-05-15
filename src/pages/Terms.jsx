@@ -1,9 +1,14 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 
 const Terms = () => {
     return (
         <div className="max-w-3xl mx-auto mt-8 px-4">
+            <Helmet>
+                <title>POALSNet Terms & Policies</title>
+                <meta name="description" content="POALSNet Terms & Policies" />
+            </Helmet>
             <h2 className="text-2xl font-bold mb-4 text-center">Terms and Policies</h2>
             <div className='text-center'>
                 <Link to="/" className="text-xl font-bold mb-4 underline underline-offset-2">POALSNet</Link>

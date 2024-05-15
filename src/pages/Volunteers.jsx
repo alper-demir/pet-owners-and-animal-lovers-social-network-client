@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { Helmet } from "react-helmet";
 
 const cities = [
     "Adana", "Adıyaman", "Afyon", "Ağrı", "Aksaray", "Amasya", "Ankara", "Antalya", "Ardahan", "Artvin",
@@ -63,6 +64,10 @@ const Volunteers = () => {
 
     return (
         <div className="mt-8 p-6 bg-white rounded-lg shadow-md dark:text-white dark:bg-[#161616]">
+            <Helmet>
+                <title>POALSNet Volunteers</title>
+                <meta name="description" content="Volunteer List" />
+            </Helmet>
             <h2 className="text-xl font-bold text-center mb-4">POALSNet Volunteers</h2>
             <p className="text-lg mb-4 text-center">Total Volunteers: {totalVolunteers}</p>
             <div className="mb-4">

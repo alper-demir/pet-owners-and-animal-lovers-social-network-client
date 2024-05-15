@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 
 const AnimalProtectionDayCountdown = () => {
     // Date of World Animal Day (October 4th)
@@ -38,6 +39,10 @@ const AnimalProtectionDayCountdown = () => {
 
     return (
         <div className="text-center mt-10 p-8 dark:text-white max-sm:mb-20">
+            <Helmet>
+                <title>Animal Protection Day</title>
+                <meta name="description" content="Join us in celebrating Animal Protection Day, a day dedicated to raising awareness about animal rights, welfare, and conservation efforts. Discover ways to get involved in protecting and advocating for animals, from supporting wildlife sanctuaries to promoting responsible pet ownership. Together, let's work towards creating a world where all animals are treated with compassion, respect, and dignity." />
+            </Helmet>
             <h2 className="text-2xl font-semibold mb-4">Countdown to World Animal Protection Day:</h2>
             <div className="flex justify-center items-center space-x-4 max-sm:space-x-2">
                 <div className="text-xl font-semibold">{days}</div>

@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 const DiscussionForum = () => {
 
@@ -58,8 +59,12 @@ const DiscussionForum = () => {
 
     return (
         <>
+            <Helmet>
+                <title>Discussion Forum</title>
+            </Helmet>
             <div className='mt-3 mb-5 text-center text-lg max-sm:text-base font-bold dark:text-white'>
                 <h3>Discussion Forum</h3>
+                <meta name="description" content="Join the Discussion Forum for animal lovers and advocates. Share pet care tips, wildlife conservation efforts, and advocacy campaigns. Connect with like-minded individuals and contribute to building a compassionate community dedicated to protecting animals." />
             </div>
             <section>
                 <div className="flex justify-end mb-4 dark:text-white">

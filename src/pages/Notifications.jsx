@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 import calculateTimeAgo from './../helpers/calculateTimeAgo';
 import { Link } from 'react-router-dom';
 import loadingGIF from "../asset/loading.gif"
+import { Helmet } from 'react-helmet';
 
 const Notifications = () => {
 
@@ -55,6 +56,10 @@ const Notifications = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Notifications</title>
+      </Helmet>
+
       {
         loading ? (
           <div className='flex justify-center mt-10'>

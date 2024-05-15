@@ -1,8 +1,14 @@
+import React from "react";
+import { Helmet } from "react-helmet";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 
 const About = () => {
     return (
         <div className="max-w-3xl p-5 dark:text-white border rounded-md mt-10 mb-20 shadow-lg">
+            <Helmet>
+                <title>About</title>
+                <meta name="description" content="Learn about the Pet Owners and Animal Lovers Social Network project developed by Alper Demir, a computer engineering student. Find out about the technologies used and the developer's message." />
+            </Helmet>
             <div className="flex justify-between items-center gap-x-3 border-b border-gray-200 dark:border-opacity-20 pb-3">
                 <h1 className="text-2xl font-bold max-sm:text-xl">
                     About the Project

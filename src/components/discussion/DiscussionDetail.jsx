@@ -10,6 +10,7 @@ import { MdModeEditOutline } from 'react-icons/md';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import { Helmet } from "react-helmet";
 
 const DiscussionDetail = () => {
     const { id } = useParams();
@@ -115,6 +116,9 @@ const DiscussionDetail = () => {
 
     return (
         <div className="mt-8 mb-40 dark:text-[#fffff9]">
+            <Helmet>
+                <title>{discussion.title}</title>
+            </Helmet>
             {isLoading ? (
                 <div className="flex justify-center items-center mt-20">
                     <img src={loading} alt="" className="w-8 h-8" />

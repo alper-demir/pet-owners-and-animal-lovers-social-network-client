@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet";
 
 const cities = [
     "Adana", "Adıyaman", "Afyon", "Ağrı", "Aksaray", "Amasya", "Ankara", "Antalya", "Ardahan", "Artvin",
@@ -99,6 +100,10 @@ const Volunteer = () => {
 
     return (
         <div className="mt-10 dark:text-white">
+            <Helmet>
+                <title>Volunteer</title>
+                <meta name="description" content="Volunteer" />
+            </Helmet>
             {
                 volunteer ? (
                     <>

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import loadingGIF from "../asset/loading.gif"
+import { Helmet } from "react-helmet";
 
 const Search = () => {
 
@@ -33,6 +34,11 @@ const Search = () => {
 
     return (
         <div className="dark:text-white w-full">
+            <Helmet>
+                <title>Search</title>
+                <meta name="description" content="Search on POALSNet" />
+            </Helmet>
+
             <div className="mt-3 mb-5 text-center text-lg max-sm:text-base font-bold">
                 <h3>Search</h3>
             </div>

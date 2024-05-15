@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 const LostPets = () => {
     const [lostPets, setLostPets] = useState([]);
@@ -39,6 +40,11 @@ const LostPets = () => {
 
     return (
         <div className="my-8 mb-20 dark:text-white">
+            <Helmet>
+                <title>Lost Pet Notices</title>
+                <meta name="description" content="Lost Pet Notices - Animal Lovers & Pet Owners. Help reunite lost pets with their owners by browsing and posting lost pet notices. Join our community to support lost pets and their families." />
+            </Helmet>
+
             <div className='mt-3 mb-5 text-center text-lg max-sm:text-base font-bold dark:text-white'>
                 <h3>Lost Pet Notices</h3>
             </div>

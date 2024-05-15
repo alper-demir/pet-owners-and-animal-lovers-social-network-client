@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import loadingGIF from "../asset/loading.gif"
 import calculateTimeAgo from "../helpers/calculateTimeAgo";
+import { Helmet } from "react-helmet";
 
 const Home = () => {
     const URL = process.env.REACT_APP_BASE_URL;
@@ -47,6 +48,10 @@ const Home = () => {
 
     return (
         <div className="dark:text-white mt-4 max-sm:text-xs max-lg:text-base">
+            <Helmet>
+                <title>Home</title>
+                <meta name="description" content="Welcome to Animal Lovers & Pet Owners, your go-to platform for all things related to pets and animals. Find valuable information on pet care, wildlife conservation, adoption, and more. Join our community of passionate animal lovers today!" />
+            </Helmet>
             <div className="flex justify-center text-lg max-sm:text-sm max-lg:text-base text-center text-[#999999] font-semibold">
                 <div onClick={() => handleViewTypeChange("posts")} className={`w-1/2 border-b-[1px] dark:border-[#777777] dark:border-opacity-30 pb-3 cursor-pointer ${viewType === "posts" ? "border-black dark:border-white dark:border-opacity-100 text-black dark:text-white" : ""}`}>Posts</div>
                 <div onClick={() => handleViewTypeChange("notices")} className={`w-1/2 border-b-[1px] dark:border-[#777777] dark:border-opacity-30 pb-3 cursor-pointer ${viewType === "notices" ? "border-black dark:border-white dark:border-opacity-100 text-black dark:text-white" : ""}`}>Notices</div>

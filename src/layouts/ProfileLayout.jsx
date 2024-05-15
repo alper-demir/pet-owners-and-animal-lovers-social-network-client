@@ -18,6 +18,7 @@ import CreatePetProfile from '../components/profile/modals/CreatePetProfile'
 import CreateNotice from '../components/profile/modals/CreateNotice'
 import Followers from '../components/profile/modals/Followers'
 import Followings from '../components/profile/modals/Followings'
+import { Helmet } from 'react-helmet'
 
 const ProfileContext = createContext();
 
@@ -259,7 +260,10 @@ const ProfileLayout = () => {
 
     return (
         <div>
-
+            <Helmet>
+                <title>Profile - @{username}</title>
+                <meta name="description" content="Volunteer" />
+            </Helmet>
             <Modal
                 open={open}
                 onClose={handleClose}

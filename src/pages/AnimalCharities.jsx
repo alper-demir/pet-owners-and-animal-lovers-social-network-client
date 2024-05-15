@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 
 const AnimalCharities = () => {
     const animalCharities = [
@@ -48,6 +49,10 @@ const AnimalCharities = () => {
 
     return (
         <div className="dark:bg-[#141414]p-6 rounded-lg shadow-md w-full mt-10 mb-20 max-sm:mb-28 p-6">
+            <Helmet>
+                <title>Animal Charities</title>
+                <meta name="description" content="Discover and support animal charities dedicated to the welfare and protection of animals. Find organizations working to rescue, rehabilitate, and provide sanctuary to animals in need. Learn how you can make a difference and contribute to the well-being of animals through volunteering, donations, and advocacy." />
+            </Helmet>
             <h2 className="text-xl font-semibold mb-4 dark:text-white text-center">Animal Charities and Organizations</h2>
             <p className="text-gray-700 dark:text-gray-300 mb-4">
                 Here are some animal charities and organizations that work to protect and support animals around the world. Click on the links to visit their websites and learn more about their initiatives and how you can contribute to their causes.
