@@ -292,7 +292,7 @@ const ProfileLayout = () => {
                         <div>
                             <div className="bg-white dark:bg-transparent my-3">
                                 <label htmlFor="about" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">About</label>
-                                <textarea id="about" rows="3" className="px-4 py-2 w-full text-sm text-gray-900 bg-white border rounded-lg dark:bg-transparent dark:text-white dark:placeholder-gray-400 outline-none resize-none" placeholder="About.." value={aboutValue} onChange={handleAboutChange} required />
+                                <textarea id="about" rows="3" className="px-4 py-2 w-full text-sm text-gray-900 bg-white border border-gray-200 dark:border-opacity-20 rounded-lg dark:bg-transparent dark:text-white dark:placeholder-gray-400 outline-none resize-none" placeholder="About.." value={aboutValue} onChange={handleAboutChange} required />
                             </div>
                             <div className="bg-white dark:bg-transparent my-3">
                                 <label htmlFor="gender" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Gender</label>
@@ -310,6 +310,15 @@ const ProfileLayout = () => {
                             </div>
                             <div className="flex justify-end bg-white dark:bg-transparent my-3">
                                 <button onClick={handleProfileUpdate} type="submit" className="text-white bg-blue-700 enabled:hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:focus:ring-blue-800">Send</button>
+                            </div>
+
+                            <div className='flex gap-x-2 items-center'>
+                                <div>
+                                    <label htmlFor="volunteer" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Volunteer Status</label>
+                                </div>
+                                <div>
+                                    <input id="volunteer" type="checkbox" checked={user.isVolunteer} className="w-5 h-5 text-blue-500 border-gray-300 rounded focus:ring-blue-500 dark:border-gray-600 dark:focus:ring-blue-500" />
+                                </div>
                             </div>
                         </div>
                     </Typography>
