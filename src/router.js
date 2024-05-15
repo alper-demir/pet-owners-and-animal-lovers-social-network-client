@@ -22,6 +22,8 @@ import AnimalCharities from "./pages/AnimalCharities";
 import ConfirmAccount from "./pages/Auth/ConfirmAccount";
 import DiscussionForum from "./pages/DiscussionForum";
 import DiscussionDetail from "./components/discussion/DiscussionDetail";
+import Volunteer from "./pages/Volunteer";
+import Volunteers from "./pages/Volunteers";
 
 const router = createBrowserRouter([
     {
@@ -72,6 +74,8 @@ const router = createBrowserRouter([
             { path: "/animal-charities", element: <AnimalCharities /> },
             { path: "/discussion-forum", element: <DiscussionForum /> },
             { path: "/discussion/:id", element: <DiscussionDetail /> },
+            { path: "/volunteer", element: <Volunteer /> },
+            { path: "/volunteers", element: <Volunteers /> },
         ]
     },
     { path: "*", element: "The page you are looking for is not found" }
