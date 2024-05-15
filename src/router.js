@@ -24,6 +24,8 @@ import DiscussionForum from "./pages/DiscussionForum";
 import DiscussionDetail from "./components/discussion/DiscussionDetail";
 import Volunteer from "./pages/Volunteer";
 import Volunteers from "./pages/Volunteers";
+import AdoptionNotices from "./pages/AdoptionNotices";
+import AdoptionNoticeDetail from "./components/adoption-notice/AdoptionNoticeDetail";
 
 const router = createBrowserRouter([
     {
@@ -61,6 +63,7 @@ const router = createBrowserRouter([
                     { path: "", element: <Posts /> },
                     { path: "pets", element: <Pets /> },
                     { path: "notices", element: <Notices /> },
+                    { path: "adoption-notices", element: <AdoptionNotices /> },
                 ]
             },
             { path: "/pet/:petId", element: <PetDetail /> },
@@ -68,6 +71,7 @@ const router = createBrowserRouter([
             { path: "/notifications", element: <Notifications /> },
             { path: "/lost-pets", element: <LostPets /> },
             { path: "/lost-pet-notice/:id", element: <LostPetDetail /> },
+            { path: "/adoption-notice/:id", element: <AdoptionNoticeDetail /> },
             { path: "/search", element: <Search /> },
             { path: "/about", element: <About /> },
             { path: "/animal-protection-day-count-down", element: <AnimalProtectionDayCountdown /> },

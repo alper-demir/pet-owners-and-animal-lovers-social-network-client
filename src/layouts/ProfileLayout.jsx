@@ -19,6 +19,7 @@ import CreateNotice from '../components/profile/modals/CreateNotice'
 import Followers from '../components/profile/modals/Followers'
 import Followings from '../components/profile/modals/Followings'
 import { Helmet } from 'react-helmet'
+import CreateAdoptionNotice from '../components/profile/modals/CreateAdoptionNotice'
 
 const ProfileContext = createContext();
 
@@ -32,6 +33,7 @@ const ProfileLayout = () => {
     const [posts, setPosts] = useState([])
     const [pets, setPets] = useState([])
     const [notices, setNotices] = useState([])
+    const [adoptionNotices, setAdoptionNotices] = useState([])
     const [followers, setFollowers] = useState([])
     const [followings, setFollowings] = useState([])
     const [ownProfile, setOwnProfile] = useState();
@@ -100,6 +102,19 @@ const ProfileLayout = () => {
         }
     }
 
+    const getAdoptionNotices = async () => {
+        try {
+            const adoptionNotice = await axios.post(`${URL}/adoption-notices/${username}`, {}, { headers: { Authorization: token } })
+            if (adoptionNotice) {
+                setAdoptionNotices(adoptionNotice.data.adoptionNotices)
+                console.log(adoptionNotice.data);
+            }
+        } catch (error) {
+            console.log(error);
+            navigate("/")
+        }
+    }
+
     const isUserInOwnProfile = () => {
         username === currentUser ? setOwnProfile(true) : setOwnProfile(false)
     }
@@ -109,6 +124,7 @@ const ProfileLayout = () => {
         getPosts();
         getPetProfiles();
         getNotices();
+        getAdoptionNotices();
         isUserInOwnProfile();
         checkRequestStatus();
         checkProfileVisibility();
@@ -255,6 +271,7 @@ const ProfileLayout = () => {
     const [openCreatePostModal, setOpenCreatePostModal] = useState(false);
     const [openCreatePetProfileModal, setOpenCreatePetProfileModal] = useState(false);
     const [openCreateNoticeModal, setOpenCreateNoticeModal] = useState(false);
+    const [openCreateAdoptionNoticeModal, setOpenCreateAdoptionNoticeModal] = useState(false);
     const [openFollowingsModal, setOpenFollowingsModal] = useState(false);
     const [openFollowersModal, setOpenFollowersModal] = useState(false);
 
@@ -378,6 +395,7 @@ const ProfileLayout = () => {
                             <div className='cursor-pointer hover:scale-125 duration-200' onClick={() => setOpenCreatePostModal(true)}><IoIosCreate /></div>
                             <div className='cursor-pointer hover:scale-125 duration-200' onClick={() => setOpenCreatePetProfileModal(true)}><MdCreateNewFolder /></div>
                             <div className='cursor-pointer hover:scale-125 duration-200' onClick={() => setOpenCreateNoticeModal(true)}><MdCreate /></div>
+                            <div className='cursor-pointer hover:scale-125 duration-200' onClick={() => setOpenCreateAdoptionNoticeModal(true)}><MdCreate /></div>
                         </div>
                     </div>
                 }
@@ -395,6 +413,11 @@ const ProfileLayout = () => {
                 {
                     openCreateNoticeModal &&
                     <CreateNotice openCreateNoticeModal={openCreateNoticeModal} setOpenCreateNoticeModal={setOpenCreateNoticeModal} getNotices={getNotices} />
+                }
+
+                {
+                    openCreateAdoptionNoticeModal &&
+                    <CreateAdoptionNotice openCreateAdoptionNoticeModal={openCreateAdoptionNoticeModal} setOpenCreateAdoptionNoticeModal={setOpenCreateAdoptionNoticeModal} getAdoptionNotices={getAdoptionNotices} />
                 }
 
                 {
@@ -422,7 +445,7 @@ const ProfileLayout = () => {
                             <>
                                 <Links username={username} />
 
-                                <ProfileContext.Provider value={{ posts, pets, notices }}>
+                                <ProfileContext.Provider value={{ posts, pets, notices, adoptionNotices }}>
                                     <div className='mb-20 max-sm:mb-28'>
                                         <Outlet />
                                     </div>
