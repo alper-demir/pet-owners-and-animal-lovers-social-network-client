@@ -1,16 +1,16 @@
 import { createBrowserRouter } from "react-router-dom"
 import Login from './pages/Auth/Login';
-import Posts from './pages/Posts';
+import Posts from './components/profile/Posts';
 import MainLayout from "./layouts/MainLayout";
 import ProfileLayout from "./layouts/ProfileLayout";
-import Pets from "./pages/Pets";
+import Pets from "./components/profile/Pets";
 import PetDetail from "./components/pets/PetDetail";
 import PostDetail from "./components/posts/PostDetail";
 import Notifications from "./pages/Notifications";
-import LostPets from "./pages/LostPets";
+import Notices from "./pages/Notices";
 import LostPetDetail from "./components/lost-pets/LostPetDetail";
 import Register from "./pages/Auth/Register";
-import Notices from "./pages/Notices";
+import LostNotices from "./components/profile/LostNotices";
 import Search from "./pages/Search";
 import About from "./pages/About";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
@@ -24,7 +24,7 @@ import DiscussionForum from "./pages/DiscussionForum";
 import DiscussionDetail from "./components/discussion/DiscussionDetail";
 import Volunteer from "./pages/Volunteer";
 import Volunteers from "./pages/Volunteers";
-import AdoptionNotices from "./pages/AdoptionNotices";
+import AdoptionNotices from "./components/profile/AdoptionNotices";
 import AdoptionNoticeDetail from "./components/adoption-notice/AdoptionNoticeDetail";
 
 const router = createBrowserRouter([
@@ -62,14 +62,14 @@ const router = createBrowserRouter([
                 children: [
                     { path: "", element: <Posts /> },
                     { path: "pets", element: <Pets /> },
-                    { path: "notices", element: <Notices /> },
+                    { path: "notices", element: <LostNotices /> },
                     { path: "adoption-notices", element: <AdoptionNotices /> },
                 ]
             },
             { path: "/pet/:petId", element: <PetDetail /> },
             { path: "/post/:postId", element: <PostDetail /> },
             { path: "/notifications", element: <Notifications /> },
-            { path: "/lost-pets", element: <LostPets /> },
+            { path: "/notices", element: <Notices /> },
             { path: "/lost-pet-notice/:id", element: <LostPetDetail /> },
             { path: "/adoption-notice/:id", element: <AdoptionNoticeDetail /> },
             { path: "/search", element: <Search /> },

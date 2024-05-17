@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { usePostsContext } from '../layouts/ProfileLayout';
+import { usePostsContext } from '../../layouts/ProfileLayout';
 import { FaRegComment } from "react-icons/fa";
 import { BiSolidLike } from "react-icons/bi";
 
