@@ -31,15 +31,27 @@ const PostDetail = () => {
     const { userId } = useSelector(state => state.user.user)
     const { username } = useSelector(state => state.user.user)
 
+    const canUserSeeTheContent = async (contentOwnerId) => {
+        const response = await axios.post(`${URL}/check-user-allowed-to-see-content`, { userId, contentOwnerId }, { headers: { Authorization: token } });
+        return { allowed: response.data.allowed, message: response.data.message };
+    }
+
     const getPostData = async () => {
         try {
             const postData = await axios.post(`${URL}/post/${postId}`, {}, { headers: { Authorization: token } });
             if (postData) {
-                setPost(postData.data);
-                setPostComments(postData.data.comments);
-                setPostLikes(postData.data.likes);
-                console.log(postData.data);
-                setIsLoading(false)
+                const userCanSee = await canUserSeeTheContent(postData.data.userId._id); // User may view following and public account's posts.
+                if (userCanSee.allowed) {
+                    setPost(postData.data);
+                    setPostComments(postData.data.comments);
+                    setPostLikes(postData.data.likes);
+                    console.log(postData.data);
+                    setIsLoading(false)
+                }
+                else {
+                    toast.error(userCanSee.message);
+                    navigate("/")
+                }
             }
         } catch (error) {
             console.log("Post detail page error: " + error);
