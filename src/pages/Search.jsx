@@ -47,7 +47,7 @@ const Search = () => {
                     onChange={handleSearch}
                     type="text"
                     className="w-full rounded-md p-2 pr-12 border border-gray-200 dark:border-opacity-20 dark:bg-transparent"
-                    placeholder="Search user, post, notice or pet.."
+                    placeholder="Search.."
                 />
                 <IoSearchOutline className="text-2xl absolute right-1 top-1/2 -translate-y-1/2" />
             </div>
@@ -98,7 +98,7 @@ const Search = () => {
                             </div>
 
                             {/* POSTS */}
-                            <div>
+                            {/* <div>
                                 {!loading && results.posts && results.posts.length === 0 && (
                                     <div className="border-b my-2 pb-2 border-gray-200 dark:border-opacity-20">No posts found.</div>
                                 )}
@@ -129,7 +129,7 @@ const Search = () => {
                                         </div>
                                     </div>
                                 )}
-                            </div>
+                            </div> */}
 
                             {/* PET PROFILE */}
                             <div>
