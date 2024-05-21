@@ -4,7 +4,7 @@ import Links from '../components/profile/Links'
 import { useSelector } from 'react-redux'
 import "../components/profile/css/profile.css"
 import axios from 'axios'
-import { MdCreateNewFolder, MdCreate } from "react-icons/md";
+import { MdCreateNewFolder, MdCreate, MdVisibility, MdVisibilityOff } from "react-icons/md";
 import { IoIosCreate } from "react-icons/io";
 import loading from "../asset/loading.gif"
 
@@ -334,6 +334,47 @@ const ProfileLayout = () => {
     const [openFollowingsModal, setOpenFollowingsModal] = useState(false);
     const [openFollowersModal, setOpenFollowersModal] = useState(false);
 
+
+    const [oldPassword, setOldPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [isChangePasswordVisible, setIsChangePasswordVisible] = useState(false);
+
+    const isPasswordValid = (password) => {
+        const minLength = 12;
+        const hasUppercase = /[A-Z]/.test(password);
+        return password.length >= minLength && hasUppercase;
+    };
+
+    const handleChangePassword = async () => {
+        if (!isPasswordValid(newPassword)) {
+            toast.error('Password must be at least 12 characters long and contain at least one uppercase letter.');
+            return;
+        }
+
+        if (oldPassword.length > 0) {
+            try {
+                const response = await axios.put(`${URL}/change-password-in-profile`,
+                    { userId, oldPassword, newPassword }, { headers: { Authorization: token } });
+                if (response.data.status === "success") {
+                    toast.success(response.data.message);
+                    setOldPassword("");
+                    setNewPassword("");
+                } else {
+                    toast.error(response.data.message);
+                }
+            } catch (error) {
+                console.error('Error changing password:', error);
+                toast.error('An error occurred while changing password.');
+            }
+        }
+        else {
+            toast.error("Please check input fields.")
+        }
+    };
+
+    const [showOldPassword, setShowOldPassword] = useState(false);
+    const [showNewPassword, setShowNewPassword] = useState(false);
+
     return (
         <div>
             <Helmet>
@@ -427,6 +468,48 @@ const ProfileLayout = () => {
                                     )
                                     }
                                 </div>
+                            </div>
+
+                            <div className="border-b-2 border-gray-200 dark:border-opacity-20 my-3">
+                                <button
+                                    onClick={() => setIsChangePasswordVisible(!isChangePasswordVisible)}
+                                    className="text-white font-medium rounded-lg text-sm py-2.5 text-center mb-3"
+                                >
+                                    Change Password
+                                </button>
+                                {isChangePasswordVisible && (
+                                    <div className="transition-transform transform duration-500 ease-in-out" style={{ transform: isChangePasswordVisible ? 'translateY(0)' : 'translateY(-20px)' }}>
+                                        <div className="mb-4 relative">
+                                            <label htmlFor="oldPassword" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Old Password</label>
+                                            <input
+                                                type={showOldPassword ? "text" : "password"}
+                                                id="oldPassword"
+                                                onChange={(e) => setOldPassword(e.target.value)}
+                                                placeholder="Old Password"
+                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-[#101010] dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 pr-20"
+                                            />
+                                            <div className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-lg top-7" onClick={() => setShowOldPassword(!showOldPassword)}>
+                                                {showOldPassword ? <MdVisibility /> : <MdVisibilityOff />}
+                                            </div>
+                                        </div>
+                                        <div className="mb-4 relative">
+                                            <label htmlFor="newPassword" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">New Password</label>
+                                            <input
+                                                type={showNewPassword ? "text" : "password"}
+                                                id="newPassword"
+                                                onChange={(e) => setNewPassword(e.target.value)}
+                                                placeholder="New Password"
+                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-[#101010] dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 pr-20"
+                                            />
+                                            <div className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer text-lg top-7" onClick={() => setShowNewPassword(!showNewPassword)}>
+                                                {showNewPassword ? <MdVisibility /> : <MdVisibilityOff />}
+                                            </div>
+                                        </div>
+                                        <div className="flex justify-end">
+                                            <button onClick={handleChangePassword} type="submit" className="text-white bg-blue-700 enabled:hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:focus:ring-blue-800 mb-3">Change Password</button>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
 
 
