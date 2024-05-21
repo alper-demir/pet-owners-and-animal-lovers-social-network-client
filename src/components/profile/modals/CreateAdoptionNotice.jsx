@@ -35,6 +35,7 @@ const CreateAdoptionNotice = ({ openCreateAdoptionNoticeModal, setOpenCreateAdop
 
     useEffect(() => {
         setOpen(openCreateAdoptionNoticeModal);
+        getCities();
     }, [])
 
     const handleRemoveImage = () => {
@@ -99,6 +100,14 @@ const CreateAdoptionNotice = ({ openCreateAdoptionNoticeModal, setOpenCreateAdop
             toast.error("Please try later.")
         }
 
+    }
+
+    const [cities, setCities] = useState([]);
+    const getCities = async () => {
+        const cities = await axios.get(`${BASE_URL}/cities`);
+        if (cities) {
+            setCities(cities.data);
+        }
     }
 
     return (
@@ -168,7 +177,17 @@ const CreateAdoptionNotice = ({ openCreateAdoptionNoticeModal, setOpenCreateAdop
                             </div>
                             <div className="my-2">
                                 <label htmlFor="city" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">City</label>
-                                <input type="text" id="city" onChange={(e) => setCity(e.target.value)} className="text-sm rounded-lg block w-full p-2.5 max-sm:p-2 dark:bg-transparent border dark:border-[#777777] dark:border-opacity-30" required />
+                                <select
+                                    id="city"
+                                    onChange={(e) => setCity(e.target.value)}
+                                    required
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-300 dark:bg-[#141414]"
+                                >
+                                    <option value="" disabled>Select City</option>
+                                    {cities && cities.map(city => (
+                                        <option value={city}>{city}</option>
+                                    ))}
+                                </select>
                             </div>
                             <div className="my-2">
                                 <label htmlFor="contactPhoneNumber" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contact Phone Number</label>

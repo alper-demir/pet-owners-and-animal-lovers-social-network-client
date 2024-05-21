@@ -30,6 +30,7 @@ const AdoptionNoticeDetail = () => {
     };
     useEffect(() => {
         fetchAdoptionNotice();
+        getCities();
     }, [id]);
 
 
@@ -179,6 +180,14 @@ const AdoptionNoticeDetail = () => {
             } catch (error) {
                 toast.error(error.message)
             }
+        }
+    }
+
+    const [cities, setCities] = useState([]);
+    const getCities = async () => {
+        const cities = await axios.get(`${BASE_URL}/cities`);
+        if (cities) {
+            setCities(cities.data);
         }
     }
 
@@ -373,7 +382,18 @@ const AdoptionNoticeDetail = () => {
                                     </div>
                                     <div className="my-2">
                                         <label htmlFor="city" className="block mb-2 text-sm font-medium">City</label>
-                                        <input type="text" id="city" value={city} onChange={handleCityChange} className="bg-gray-50 border border-gray-300 dark:border-[#777777] dark:border-opacity-30 text-sm rounded-lg w-full p-2.5 max-sm:p-2 dark:bg-transparent" />
+                                        <select
+                                            id="city"
+                                            value={city}
+                                            onChange={handleCityChange}
+                                            required
+                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-300 dark:bg-[#141414]"
+                                        >
+                                            <option value="" disabled>Select City</option>
+                                            {cities.map(city => (
+                                                <option key={city} value={city}>{city}</option>
+                                            ))}
+                                        </select>
                                     </div>
                                     <div className="my-2">
                                         <label htmlFor="dateOfBirth" className="block mb-2 text-sm font-medium">Date of Birth</label>

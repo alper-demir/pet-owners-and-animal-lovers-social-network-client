@@ -4,18 +4,6 @@ import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { Helmet } from "react-helmet";
 
-const cities = [
-    "Adana", "Adıyaman", "Afyon", "Ağrı", "Aksaray", "Amasya", "Ankara", "Antalya", "Ardahan", "Artvin",
-    "Aydın", "Balıkesir", "Bartın", "Batman", "Bayburt", "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur",
-    "Bursa", "Çanakkale", "Çankırı", "Çorum", "Denizli", "Diyarbakır", "Düzce", "Edirne", "Elazığ",
-    "Erzincan", "Erzurum", "Eskişehir", "Gaziantep", "Giresun", "Gümüşhane", "Hakkari", "Hatay", "Iğdır",
-    "Isparta", "İstanbul", "İzmir", "Kahramanmaraş", "Karabük", "Karaman", "Kars", "Kastamonu", "Kayseri",
-    "Kırıkkale", "Kırklareli", "Kırşehir", "Kilis", "Kocaeli", "Konya", "Kütahya", "Malatya", "Manisa",
-    "Mardin", "Mersin", "Muğla", "Muş", "Nevşehir", "Niğde", "Ordu", "Osmaniye", "Rize", "Sakarya",
-    "Samsun", "Siirt", "Sinop", "Sivas", "Şanlıurfa", "Şırnak", "Tekirdağ", "Tokat", "Trabzon", "Tunceli",
-    "Uşak", "Van", "Yalova", "Yozgat", "Zonguldak"
-];
-
 const Volunteer = () => {
     const [selectedCity, setSelectedCity] = useState("");
     const [volunteer, setVolunteer] = useState(false);
@@ -94,8 +82,17 @@ const Volunteer = () => {
         }
     }
 
+    const [cities, setCities] = useState([]);
+    const getCities = async () => {
+        const cities = await axios.get(`${URL}/cities`);
+        if (cities) {
+            setCities(cities.data);
+        }
+    }
+
     useEffect(() => {
         isVolunteer();
+        getCities();
     }, [])
 
     return (

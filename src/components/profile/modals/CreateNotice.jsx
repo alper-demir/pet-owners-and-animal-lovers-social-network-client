@@ -24,6 +24,7 @@ const CreateNotice = ({ openCreateNoticeModal, setOpenCreateNoticeModal, getNoti
     const [description, setDescription] = useState();
     const [city, setCity] = useState();
     const [gender, setGender] = useState("male");
+    const [cities, setCities] = useState([]);
 
     const [selectedImage, setSelectedImage] = useState(null);
     const [previewImage, setPreviewImage] = useState(null);
@@ -37,6 +38,7 @@ const CreateNotice = ({ openCreateNoticeModal, setOpenCreateNoticeModal, getNoti
     const BASE_URL = process.env.REACT_APP_BASE_URL;
 
     useEffect(() => {
+        getCities();
         setOpen(openCreateNoticeModal);
     }, [])
 
@@ -51,6 +53,13 @@ const CreateNotice = ({ openCreateNoticeModal, setOpenCreateNoticeModal, getNoti
         setSelectedImage(file);
         file ? setPreviewImage(URL.createObjectURL(file)) : setPreviewImage(null);
     };
+
+    const getCities = async () => {
+        const cities = await axios.get(`${BASE_URL}/cities`);
+        if (cities) {
+            setCities(cities.data);
+        }
+    }
 
     const handleCreateNotice = async (e) => {
         e.preventDefault();
@@ -190,7 +199,17 @@ const CreateNotice = ({ openCreateNoticeModal, setOpenCreateNoticeModal, getNoti
                             </div>
                             <div className="my-2">
                                 <label htmlFor="city" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">City</label>
-                                <input type="text" id="city" onChange={(e) => setCity(e.target.value)} className="text-sm rounded-lg block w-full p-2.5 max-sm:p-2 dark:bg-transparent border dark:border-[#777777] dark:border-opacity-30" required />
+                                <select
+                                    id="city"
+                                    onChange={(e) => setCity(e.target.value)}
+                                    required
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-300 dark:bg-[#141414]"
+                                >
+                                    <option value="" disabled>Select City</option>
+                                    {cities && cities.map(city => (
+                                        <option value={city}>{city}</option>
+                                    ))}
+                                </select>
                             </div>
                             <div className="my-2">
                                 <label htmlFor="contactEmail" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contact Email</label>
