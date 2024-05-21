@@ -183,11 +183,13 @@ const ProfileLayout = () => {
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => {
-        setOpen(true)
-        setAboutValue(user.about)
-        setGenderValue(user.gender)
-        setPrivacyValue(user.privacy)
+        setOpen(true);
+        setAboutValue(user.about);
+        setGenderValue(user.gender);
+        setPrivacyValue(user.privacy);
         setUsernameValue(user.username);
+        setFirstNameValue(user.firstName);
+        setLastNameValue(user.lastName);
     }
     const handleClose = () => setOpen(false);
 
@@ -219,6 +221,7 @@ const ProfileLayout = () => {
                 toast.success(response.data.message)
                 setSelectedFile(null);
                 getUserData();
+                handleClose();
             }
             console.log(response.data);
         } catch (error) {
@@ -231,6 +234,8 @@ const ProfileLayout = () => {
     const [genderValue, setGenderValue] = useState('male');
     const [privacyValue, setPrivacyValue] = useState('private');
     const [usernameValue, setUsernameValue] = useState('');
+    const [firstNameValue, setFirstNameValue] = useState('');
+    const [lastNameValue, setLastNameValue] = useState('');
 
     const [usernameAvaliable, setUsernameAvaliable] = useState(false);
     const [disabledChangeButton, setDisabledChangeButton] = useState(true);
@@ -238,6 +243,14 @@ const ProfileLayout = () => {
 
     const handleAboutChange = (e) => {
         setAboutValue(e.target.value);
+    };
+
+    const handleFirstNameChange = (e) => {
+        setFirstNameValue(e.target.value);
+    };
+
+    const handleLastNameChange = (e) => {
+        setLastNameValue(e.target.value);
     };
 
     const handleGenderChange = (e) => {
@@ -275,10 +288,24 @@ const ProfileLayout = () => {
     };
 
     const handleProfileUpdate = async () => {
+        const onlyLetters = /^[A-Za-z]+$/;
+
+        if (!onlyLetters.test(firstNameValue)) {
+            toast.error("First name should contain only letters.");
+            return;
+        }
+
+        if (!onlyLetters.test(lastNameValue)) {
+            toast.error("Last name should contain only letters.");
+            return;
+        }
+
         const updatedProfile = {
             about: aboutValue,
             gender: genderValue,
-            privacy: privacyValue
+            privacy: privacyValue,
+            firstName: firstNameValue,
+            lastName: lastNameValue
         };
 
         try {
@@ -291,6 +318,7 @@ const ProfileLayout = () => {
             if (response.data.status === "success") {
                 toast.success(response.data.message);
                 getUserData();
+                handleClose();
             } else {
                 toast.error("An error occurred while updating profile.");
             }
@@ -416,6 +444,14 @@ const ProfileLayout = () => {
                                 <textarea id="about" rows="3" className="px-4 py-2 w-full text-sm text-gray-900 bg-white border border-gray-200 dark:border-opacity-20 rounded-lg dark:bg-transparent dark:text-white dark:placeholder-gray-400 outline-none resize-none" placeholder="About.." value={aboutValue} onChange={handleAboutChange} required />
                             </div>
                             <div className="bg-white dark:bg-transparent my-3">
+                                <label htmlFor="firstName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First Name</label>
+                                <input id="firstName" rows="3" className="px-4 py-2 w-full text-sm text-gray-900 bg-white border border-gray-200 dark:border-opacity-20 rounded-lg dark:bg-transparent dark:text-white dark:placeholder-gray-400 outline-none resize-none" placeholder="Firstname" value={firstNameValue} onChange={handleFirstNameChange} required />
+                            </div>
+                            <div className="bg-white dark:bg-transparent my-3">
+                                <label htmlFor="lastName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Last Name</label>
+                                <input id="lastName" rows="3" className="px-4 py-2 w-full text-sm text-gray-900 bg-white border border-gray-200 dark:border-opacity-20 rounded-lg dark:bg-transparent dark:text-white dark:placeholder-gray-400 outline-none resize-none" placeholder="lastName" value={lastNameValue} onChange={handleLastNameChange} required />
+                            </div>
+                            <div className="bg-white dark:bg-transparent my-3">
                                 <label htmlFor="gender" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Gender</label>
                                 <select id="gender" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-[#101010] dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value={genderValue} onChange={handleGenderChange}>
                                     <option value="male">Male</option>
@@ -432,6 +468,7 @@ const ProfileLayout = () => {
                             <div className="flex justify-end bg-white dark:bg-transparent my-3">
                                 <button onClick={handleProfileUpdate} type="submit" className="text-white bg-blue-700 enabled:hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:focus:ring-blue-800">Send</button>
                             </div>
+                            {/* username */}
                             <div className='border-y-2 border-gray-200 dark:border-opacity-20'>
                                 <div className="bg-white dark:bg-transparent my-3 relative">
                                     <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
@@ -453,7 +490,7 @@ const ProfileLayout = () => {
                                     )}
                                     {usernameValid && (
                                         usernameAvaliable ? (
-                                            <div className="mb-5">
+                                            <div>
                                                 <p className="mt-2 text-sm text-green-600 dark:text-green-500">
                                                     Username available!
                                                 </p>
@@ -469,7 +506,7 @@ const ProfileLayout = () => {
                                     }
                                 </div>
                             </div>
-
+                            {/* password */}
                             <div className="border-b-2 border-gray-200 dark:border-opacity-20 my-3">
                                 <button
                                     onClick={() => setIsChangePasswordVisible(!isChangePasswordVisible)}
