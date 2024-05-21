@@ -187,6 +187,7 @@ const ProfileLayout = () => {
         setAboutValue(user.about)
         setGenderValue(user.gender)
         setPrivacyValue(user.privacy)
+        setUsernameValue(user.username);
     }
     const handleClose = () => setOpen(false);
 
@@ -229,6 +230,11 @@ const ProfileLayout = () => {
     const [aboutValue, setAboutValue] = useState('');
     const [genderValue, setGenderValue] = useState('male');
     const [privacyValue, setPrivacyValue] = useState('private');
+    const [usernameValue, setUsernameValue] = useState('');
+
+    const [usernameAvaliable, setUsernameAvaliable] = useState(false);
+    const [disabledChangeButton, setDisabledChangeButton] = useState(true);
+    const [usernameValid, setUsernameValid] = useState(true); // New state for minimum character validation
 
     const handleAboutChange = (e) => {
         setAboutValue(e.target.value);
@@ -240,6 +246,32 @@ const ProfileLayout = () => {
 
     const handlePrivacyChange = (e) => {
         setPrivacyValue(e.target.value);
+    };
+
+    const handleUsernameChange = async (e) => {
+        const username = e.target.value;
+        setUsernameValue(username);
+
+        if (username.length < 3) {
+            setUsernameValid(false);
+            setUsernameAvaliable(false); // Reset availability state if username is too short
+            setDisabledChangeButton(true)
+            return;
+        } else {
+            setUsernameValid(true);
+        }
+
+        if (usernameValue !== username) {
+            const res = await axios.post(`${URL}/check-username`, { username });
+            if (res.data.avaliable) {
+                setUsernameAvaliable(true)
+                setDisabledChangeButton(false)
+            }
+            else {
+                setUsernameAvaliable(false)
+                setDisabledChangeButton(true)
+            }
+        }
     };
 
     const handleProfileUpdate = async () => {
@@ -265,6 +297,33 @@ const ProfileLayout = () => {
         } catch (error) {
             console.error('Error updating profile:', error);
             toast.error("An error occurred while updating profile.");
+        }
+    };
+
+    const userInfoRedux = useSelector(state => state.user.user);
+
+    const handleChangeUsername = async (e) => {
+        e.preventDefault();
+        const data = {
+            userId: userInfoRedux?.userId,
+            firstName: userInfoRedux?.firstName,
+            lastName: userInfoRedux?.lastName,
+            username: usernameValue,
+            profileUrl: userInfoRedux?.profileUrl
+        }
+        try {
+            const response = await axios.put(`${URL}/change-username`, { userId, newUsername: usernameValue, data }, { headers: { Authorization: token } });
+            if (response.data.message === 'Username successfully changed') {
+                navigate(`/${usernameValue}`)
+                toast.success('Username changed successfully');
+                localStorage.setItem("token", response.data.token);
+                getUserData();
+            } else {
+                toast.error(response.data.message);
+            }
+        } catch (error) {
+            console.error('Error changing username:', error);
+            toast.error('An error occurred while changing the username.');
         }
     };
 
@@ -332,8 +391,46 @@ const ProfileLayout = () => {
                             <div className="flex justify-end bg-white dark:bg-transparent my-3">
                                 <button onClick={handleProfileUpdate} type="submit" className="text-white bg-blue-700 enabled:hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:focus:ring-blue-800">Send</button>
                             </div>
+                            <div className='border-y-2 border-gray-200 dark:border-opacity-20'>
+                                <div className="bg-white dark:bg-transparent my-3 relative">
+                                    <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
+                                    <input
+                                        id="username"
+                                        className="px-4 py-2 w-full text-sm text-gray-900 bg-white border border-gray-200 dark:border-opacity-20 rounded-lg dark:bg-transparent dark:text-white dark:placeholder-gray-400 outline-none resize-none pr-20"
+                                        placeholder="Username.."
+                                        value={usernameValue}
+                                        onChange={handleUsernameChange}
+                                        required
+                                    />
+                                    <button className='absolute right-2 top-9 text-sm disabled:text-gray-400' disabled={disabledChangeButton} type='button' onClick={handleChangeUsername}>Change</button>
+                                    {!usernameValid && (
+                                        <div>
+                                            <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                                                Username must be at least 3 characters long!
+                                            </p>
+                                        </div>
+                                    )}
+                                    {usernameValid && (
+                                        usernameAvaliable ? (
+                                            <div className="mb-5">
+                                                <p className="mt-2 text-sm text-green-600 dark:text-green-500">
+                                                    Username available!
+                                                </p>
+                                            </div>
+                                        ) : (
+                                            <div>
+                                                <p className="mt-2 text-sm text-red-600 dark:text-red-500">
+                                                    Username already taken!
+                                                </p>
+                                            </div>
+                                        )
+                                    )
+                                    }
+                                </div>
+                            </div>
 
-                            <div className='flex gap-x-2 items-center'>
+
+                            <div className='flex gap-x-2 items-center my-3'>
                                 <div>
                                     <label htmlFor="volunteer" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Volunteer Status</label>
                                 </div>
