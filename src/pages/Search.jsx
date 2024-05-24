@@ -15,19 +15,15 @@ const Search = () => {
     const handleSearch = async (e) => {
         const inputValue = e.target.value;
         setInput(inputValue);
-        if (inputValue.length > 3) {
-            setLoading(true);
-            try {
-                const res = await axios.get(`${URL}/search?q=${input}`);
-                setResults(res.data);
-            } catch (error) {
-                console.error("Error fetching search results:", error);
-                setResults({});
-            } finally {
-                setLoading(false);
-            }
-        } else {
+        setLoading(true);
+        try {
+            const res = await axios.get(`${URL}/search?q=${input}`);
+            setResults(res.data);
+        } catch (error) {
+            console.error("Error fetching search results:", error);
             setResults({});
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -184,6 +180,41 @@ const Search = () => {
                                             {results.lostPets.map((notice) => (
                                                 <Link
                                                     to={`/lost-pet-notice/${notice._id}`}
+                                                    className="flex my-1 w-full items-center border-b dark:border-opacity-20 border-gray-200 last:border-0"
+                                                    key={notice._id}
+                                                >
+                                                    <div className="flex flex-col gap-y-1 w-1/6 p-2 items-center">
+                                                        <div>
+                                                            <img
+                                                                src={`${URL}/public/images/${notice.image}`}
+                                                                alt=""
+                                                                className="w-12 h-12 rounded-full object-cover"
+                                                            />
+                                                        </div>
+                                                        <div className="text-center">{notice.name}</div>
+                                                    </div>
+                                                    <div>{notice.description}</div>
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* ADOPTION NOTICES */}
+                            <div>
+                                {!loading && results.adoptionNotices && results.adoptionNotices.length === 0 && (
+                                    <div className="border-b my-2 pb-2 border-gray-200 dark:border-opacity-20">No adoption notices found.</div>
+                                )}
+                                {!loading && results.adoptionNotices && results.adoptionNotices.length > 0 && (
+                                    <div>
+                                        <div className="mt-3 mb-5 text-lg max-sm:text-base font-bold">
+                                            <h3>Adoption Notices</h3>
+                                        </div>
+                                        <div className="border dark:border-opacity-20 rounded-md border-gray-200 break-words">
+                                            {results.adoptionNotices.map((notice) => (
+                                                <Link
+                                                    to={`/adoption-notice/${notice._id}`}
                                                     className="flex my-1 w-full items-center border-b dark:border-opacity-20 border-gray-200 last:border-0"
                                                     key={notice._id}
                                                 >
