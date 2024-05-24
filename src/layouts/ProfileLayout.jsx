@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { Outlet, useNavigate, useParams } from 'react-router-dom'
+import { Link, Outlet, useNavigate, useParams } from 'react-router-dom'
 import Links from '../components/profile/Links'
 import { useSelector } from 'react-redux'
 import "../components/profile/css/profile.css"
@@ -618,6 +618,15 @@ const ProfileLayout = () => {
                 }
 
                 {
+                    !ownProfile &&
+                    <Link to={`/chat/${userId}-${user._id}`} onClick={handleOpen}>
+                        <div className='border text-center my-2 rounded-xl py-2 font-semibold cursor-pointer dark:text-white dark:border-[#777777]' onClick={handleOpen}>
+                            <button>Send Message</button>
+                        </div>
+                    </Link>
+                }
+
+                {
                     openCreatePostModal &&
                     <CreatePost openCreatePostModal={openCreatePostModal} setOpenCreatePostModal={setOpenCreatePostModal} getPosts={getPosts} />
                 }
@@ -680,7 +689,7 @@ const ProfileLayout = () => {
                     )
             }
 
-        </div>
+        </div >
     )
 }
 

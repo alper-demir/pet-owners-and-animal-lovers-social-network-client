@@ -26,6 +26,7 @@ import Volunteer from "./pages/Volunteer";
 import Volunteers from "./pages/Volunteers";
 import AdoptionNotices from "./components/profile/AdoptionNotices";
 import AdoptionNoticeDetail from "./components/adoption-notice/AdoptionNoticeDetail";
+import Chat from "./pages/Chat";
 
 const router = createBrowserRouter([
     {
@@ -80,6 +81,8 @@ const router = createBrowserRouter([
             { path: "/discussion/:id", element: <DiscussionDetail /> },
             { path: "/volunteer", element: <Volunteer /> },
             { path: "/volunteers", element: <Volunteers /> },
+            { path: "/chat/:roomId", element: <Chat /> }
+
         ]
     },
     { path: "*", element: "The page you are looking for is not found" }
