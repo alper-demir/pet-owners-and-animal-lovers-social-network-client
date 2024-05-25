@@ -57,7 +57,8 @@ const SettingsDropDown = () => {
             <div id='settings' className='absolute top-7 -left-[8.5rem] border-[1px] border-gray-100 rounded-xl w-[174px] font-semibold text-[15px] hidden bg-white dark:bg-[#181818] dark:text-white dark:border-[#777777] dark:border-opacity-20'>
                 <ul className='flex flex-col'>
                     <li className='p-3 border-b-[1px] dark:border-[#777777] dark:border-opacity-40' onClick={changeTheme}>Change theme</li>
-                    <Link to="/about" className='p-3 border-b-[1px] dark:border-[#777777] dark:border-opacity-40'>About</Link>
+                    <Link to="/about" className='p-3 border-b-[1px] dark:border-[#777777] dark:border-opacity-40' onClick={dropDownSettings}>About</Link>
+                    <Link to="/chat" className='p-3 border-b-[1px] dark:border-[#777777] dark:border-opacity-40' onClick={dropDownSettings}>Chat</Link>
                     <li className='p-3' onClick={logout} >Logout</li>
                 </ul>
             </div>
