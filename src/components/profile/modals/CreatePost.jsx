@@ -6,15 +6,14 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-
 const CreatePost = ({ openCreatePostModal, setOpenCreatePostModal, getPosts }) => {
     const { userId } = useSelector(state => state.user.user)
 
     const fileInputRef = useRef(null);
 
     const [content, setContent] = useState("");
-    const [selectedImage, setSelectedImage] = useState(null);
-    const [previewImage, setPreviewImage] = useState(null);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [previewFile, setPreviewFile] = useState(null);
     const [open, setOpen] = useState(false);
     const handleClose = () => {
         setOpen(false)
@@ -26,17 +25,17 @@ const CreatePost = ({ openCreatePostModal, setOpenCreatePostModal, getPosts }) =
 
     useEffect(() => {
         setOpen(openCreatePostModal);
-    }, [])
+    }, [openCreatePostModal]);
 
     const handleCreatePost = async () => {
 
-        if (!selectedImage) {
+        if (!selectedFile) {
             alert('Please select a file.');
             return;
         }
 
         const formData = new FormData();
-        formData.append('image', selectedImage);
+        formData.append('image', selectedFile);
         formData.append('userId', userId);
         formData.append('content', content);
 
@@ -61,17 +60,20 @@ const CreatePost = ({ openCreatePostModal, setOpenCreatePostModal, getPosts }) =
             toast.error('An error occurred while creating post.');
         }
     };
-
-    const handleRemoveImage = () => {
-        setPreviewImage(null); // Cleaer preview
-        setSelectedImage(null)
-        fileInputRef.current.value = null; // Clear input content
+    const handleRemoveFile = () => {
+        setPreviewFile(null);
+        setSelectedFile(null);
+        fileInputRef.current.value = null;
     };
 
-    const handleImageChange = (event) => {
-        const file = event.target.files[0]
-        setSelectedImage(file);
-        file ? setPreviewImage(URL.createObjectURL(file)) : setPreviewImage(null)
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setSelectedFile(file);
+            setPreviewFile({ url: URL.createObjectURL(file), type: file.type });
+        } else {
+            setPreviewFile(null);
+        }
     };
 
     return (
@@ -88,21 +90,27 @@ const CreatePost = ({ openCreatePostModal, setOpenCreatePostModal, getPosts }) =
                     </Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }} >
                         <div className="my-2">
-                            <label htmlFor="image" className="block mb-2 text-sm font-medium">Image</label>
+                            <label htmlFor="file" className="block mb-2 text-sm font-medium">File</label>
                             <input
                                 type="file"
-                                id="image"
+                                id="file"
                                 ref={fileInputRef}
-                                onChange={handleImageChange}
+                                onChange={handleFileChange}
                                 className="border dark:border-[#777777] dark:border-opacity-30 text-sm rounded-lg block w-full p-2.5 max-sm:p-2 dark:bg-transparent"
                             />
                         </div>
                         <div>
-                            {previewImage !== null &&
+                            {previewFile !== null &&
                                 <div>
                                     <span>Preview</span>
-                                    <img src={previewImage} alt='previewImage' className='w-full object-cover max-h-96 mb-2' />
-                                    <button onClick={handleRemoveImage} className='bg-red-600 px-3 rounded-lg text-white py-1'>Remove</button>
+                                    {previewFile.type.startsWith('video/') ? (
+                                        <video controls src={previewFile.url} className='w-full object-cover max-h-96 mb-2'>
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    ) : (
+                                        <img src={previewFile.url} alt='preview' className='w-full object-cover max-h-96 mb-2' />
+                                    )}
+                                    <button onClick={handleRemoveFile} className='bg-red-600 px-3 rounded-lg text-white py-1'>Remove</button>
                                 </div>
                             }
                         </div>
@@ -110,18 +118,14 @@ const CreatePost = ({ openCreatePostModal, setOpenCreatePostModal, getPosts }) =
                             <label htmlFor="content" className="block mb-2 text-sm font-medium">Content</label>
                             <textarea name="content" id="content" rows="5" placeholder='Content..' className='resize-none w-full p-2 border dark:border-[#777777] dark:border-opacity-30 rounded-md outline-none dark:bg-transparent ' onChange={(e) => setContent(e.target.value)}></textarea>
                         </div>
-
-
                         <div className="flex justify-end bg-white dark:bg-transparent my-3">
                             <button onClick={handleCreatePost} type="submit" className="text-white bg-blue-700 enabled:hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:focus:ring-blue-800">Create</button>
                         </div>
                     </Typography>
                 </Box>
-
-
             </Modal>
         </div>
-    )
-}
+    );
+};
 
-export default CreatePost
+export default CreatePost;

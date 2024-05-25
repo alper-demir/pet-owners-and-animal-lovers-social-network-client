@@ -252,7 +252,13 @@ const PostDetail = () => {
                                 }
 
                                 <div className="mt-1">
-                                    <img src={`${URL}/public/images/${post.image}`} className="rounded-md object-cover w-full" alt="img" />
+                                    {
+                                        post.image.endsWith("mp4") ? (
+                                            <video controls src={`${URL}/public/images/${post.image}`} className="rounded-md object-cover w-full" />
+                                        ) : (
+                                            <img src={`${URL}/public/images/${post.image}`} className="rounded-md object-cover w-full" alt="img" />
+                                        )
+                                    }
                                 </div>
                                 {/* icons */}
                                 <div className='flex gap-1 -ml-2'>

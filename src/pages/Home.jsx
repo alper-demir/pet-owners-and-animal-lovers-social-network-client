@@ -116,7 +116,15 @@ const Home = () => {
                                                             }
 
                                                             <Link to={`/post/${timeline._id}`} className="mt-1">
-                                                                <img src={`${URL}/public/images/${timeline.image}`} className="rounded-md object-cover w-full" alt="img" />
+                                                                {
+                                                                    timeline.image.endsWith("mp4") ?
+                                                                        (
+                                                                            <video src={`${URL}/public/images/${timeline.image}`} controls className="rounded-md object-cover w-full" alt="img" />
+                                                                        ) :
+                                                                        (
+                                                                            <img src={`${URL}/public/images/${timeline.image}`} className="rounded-md object-cover w-full" alt="img" />
+                                                                        )
+                                                                }
                                                             </Link>
 
                                                             <div className='flex gap-1 text-[#999999] dark:text-[#777777] mt-1'>
