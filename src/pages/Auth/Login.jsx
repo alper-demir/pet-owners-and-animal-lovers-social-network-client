@@ -53,7 +53,7 @@ const Login = () => {
     };
 
     return (
-        <div className="h-screen bg-img">
+        <div className="h-screen bg-img-auth">
             {isLoading ? (
                 <div className="flex justify-center items-center mt-20"> <img src={loading} alt="" className="w-16 h-16" /> </div>
             ) : (

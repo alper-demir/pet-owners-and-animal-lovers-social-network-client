@@ -187,7 +187,7 @@ const Chat = ({ setChatData }) => {
                             <FaListUl className='text-2xl cursor-pointer' onClick={() => setOpen(true)} />
                         </div>
                     </div>
-                    <div className="flex-grow overflow-y-auto p-4  dark:text-[#dbd5d5] bg-img bg-opacity-10" ref={chatContainerRef}>
+                    <div className="flex-grow overflow-y-auto p-4 dark:text-[#dbd5d5] bg-img bg-opacity-10" ref={chatContainerRef}>
                         <div className="space-y-2">
                             {messages.map((message, index) => (
                                 <div key={index}>

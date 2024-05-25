@@ -51,7 +51,7 @@ const Register = () => {
     }
 
     return (
-        <div className="h-screen bg-red-500 bg-img">
+        <div className="h-screen bg-img-auth">
             <div className="flex justify-center flex-col items-center pt-4 font-bold text-white">
                 <MdOutlinePets className='text-5xl' title='POALSNet' />
                 <span className="text-xl">POALSNet</span>

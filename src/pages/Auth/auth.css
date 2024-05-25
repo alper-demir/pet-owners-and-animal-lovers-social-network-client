@@ -1,5 +1,5 @@
-.bg-img {
-    background-image: url('../../asset/bg-view.jpg');
+.bg-img-auth {
+    background-image: url('../../asset/forest-bg.jpg');
     background-repeat: no-repeat;
     background-size: cover;
 }
