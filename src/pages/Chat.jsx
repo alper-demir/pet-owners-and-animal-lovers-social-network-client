@@ -9,8 +9,9 @@ import { FaListUl } from "react-icons/fa6";
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import { useChatContext } from '../layouts/ChatLayout';
 
-const Chat = () => {
+const Chat = ({ setChatData }) => {
     const [messages, setMessages] = useState([]);
     const [messageInput, setMessageInput] = useState('');
     const [socket, setSocket] = useState(null);
@@ -21,7 +22,6 @@ const Chat = () => {
     const [receiverData, setReceiverData] = useState({});
     const currentUserId = useSelector(state => state.user.user.userId);
     const [isAuthorized, setIsAuthorized] = useState(false);
-    const [chats, setChats] = useState([]);
     const [loadingChat, setLoadingChat] = useState(false);
     const [open, setOpen] = useState(false);
 
@@ -29,6 +29,10 @@ const Chat = () => {
 
     const URL = process.env.REACT_APP_BASE_URL
     const navigate = useNavigate();
+
+
+    const { chats, setChats } = useChatContext();
+
 
     useEffect(() => {
         const verifyAccess = async () => {
@@ -84,6 +88,7 @@ const Chat = () => {
             setLoadingChat(true)
             const chatsData = await axios.get(`${URL}/user-chats/${userId}`);
             setChats(chatsData.data);
+            setChatData(chatsData.data)
             console.log(chatsData.data);
         } catch (error) {
             // toast.error(error.message);
@@ -100,6 +105,17 @@ const Chat = () => {
             toast.error(error.message);
         }
     }
+
+    const markMessageAsRead = async () => {
+        try {
+            await axios.post(`${URL}/mark-message-as-read`, { roomId, userId: currentUserId })
+        } catch (error) {
+
+        }
+    }
+    useEffect(()=>{
+        
+    },[])
 
     useEffect(() => {
 
@@ -134,7 +150,7 @@ const Chat = () => {
 
     const handleMessageSend = () => {
         fetchChats();
-        if (!messageInput.trim()) return;
+        if (!messageInput.trim()) return toast.error("Input field can not be empty!");
         socket.emit("message", { roomId: room, senderId: userId, receiverId, content: messageInput });
         setMessageInput('');
     };
@@ -144,43 +160,7 @@ const Chat = () => {
     }
 
     return (
-        <div className="flex h-[85vh] max-sm:h-[80vh] border rounded-md dark:border-opacity-20 border-gray-200">
-            <div className="border-r dark:border-opacity-20 border-gray-200 overflow-y-auto dark:text-[#f1f1f1] max-sm:hidden">
-                <h2 className="text-xl text-center font-semibold border-b dark:border-opacity-20 border-gray-200 py-3">Chats</h2>
-                {chats ? (
-                    loadingChat ? (<div className='flex justify-center'><img src={loadingGIF} alt="loading" className='w-10 h-10' /></div>) :
-                        (chats.map((chat, index) => (
-
-                            chat.receiverId._id === userId ? (
-                                <Link to={`/chat/${chat.roomId}`} key={index} className="block p-4 hover:bg-[#F5F5F5] dark:hover:bg-[#1C1C1C] border-b dark:border-opacity-20 border-gray-200">
-                                    <div className="flex items-center space-x-2 max-sm:flex-col max-sm:text-center max-sm:space-x-0">
-                                        <img src={`${URL}/public/images/${chat.senderId.profileUrl}`} alt="profile" className="w-10 h-10 rounded-full object-cover" />
-                                        <div>
-                                            <p className="font-medium">{chat.senderId.firstName} {chat.senderId.lastName}</p>
-                                            <p className="text-xs">{chat.content}</p>
-                                        </div>
-                                    </div>
-                                    <span className='text-xs'>{new Date(chat.timestamp).toLocaleTimeString()}</span>
-                                </Link>
-                            ) : (
-                                <Link to={`/chat/${chat.roomId}`} key={index} className="block p-4 hover:bg-[#F5F5F5] dark:hover:bg-[#1C1C1C] border-b dark:border-opacity-20 border-gray-200">
-                                    <div className="flex items-center space-x-2 max-sm:flex-col max-sm:text-center max-sm:space-x-0">
-                                        <img src={`${URL}/public/images/${chat.receiverId.profileUrl}`} alt="profile" className="w-10 h-10 rounded-full object-cover" />
-                                        <div>
-                                            <p className="font-medium">{chat.receiverId.firstName} {chat.receiverId.lastName}</p>
-                                            <p className="text-xs">{chat.content}</p>
-                                        </div>
-                                    </div>
-                                    <span className='text-xs'>{new Date(chat.timestamp).toLocaleTimeString()}</span>
-                                </Link>
-                            )
-
-                        )
-                        ))
-                ) : (
-                    <p>No chats available</p>
-                )}
-            </div>
+        <>
             <div className="flex-grow">
                 <div className="flex flex-col h-full">
                     <div className="dark:text-[#f1f1f1] flex border-b dark:border-opacity-20 border-gray-200 items-center justify-between pr-5">
@@ -201,7 +181,7 @@ const Chat = () => {
                                         <div className="flex justify-end">
                                             <div className="flex flex-col">
                                                 <div className="bg-blue-200 p-2 rounded-lg max-w-xs dark:bg-indigo-700">
-                                                    <p>{message.content}</p>
+                                                    <p className='break-words'>{message.content}</p>
                                                 </div>
                                                 <div className="text-end text-xs">
                                                     <span>{new Date(message.timestamp).toLocaleTimeString()}</span>
@@ -212,7 +192,7 @@ const Chat = () => {
                                         <div className="flex">
                                             <div className="flex flex-col">
                                                 <div className="bg-gray-300 p-2 rounded-lg max-w-xs dark:bg-sky-700">
-                                                    <p>{message.content}</p>
+                                                    <p className='break-words'>{message.content}</p>
                                                 </div>
                                                 <div className="text-xs">
                                                     <span>{new Date(message.timestamp).toLocaleTimeString()}</span>
@@ -230,9 +210,9 @@ const Chat = () => {
                             placeholder="Type your message..."
                             value={messageInput}
                             onChange={(e) => setMessageInput(e.target.value)}
-                            className="flex-grow p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 dark:bg-[#272727]"
+                            className="flex-grow p-2 rounded-md outline-none dark:bg-[#272727]"
                         />
-                        <button class="bg-blue-500 text-white rounded-full p-2 ml-2 hover:bg-blue-600 focus:outline-none" onClick={handleMessageSend}>
+                        <button class="bg-indigo-600 text-white rounded-full p-2 ml-2 hover:bg-indigo-700 focus:outline-none dark:bg-fuchsia-600 dark:hover:bg-fuchsia-700" onClick={handleMessageSend}>
                             <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M11.5003 12H5.41872M5.24634 12.7972L4.24158 15.7986C3.69128 17.4424 3.41613 18.2643 3.61359 18.7704C3.78506 19.21 4.15335 19.5432 4.6078 19.6701C5.13111 19.8161 5.92151 19.4604 7.50231 18.7491L17.6367 14.1886C19.1797 13.4942 19.9512 13.1471 20.1896 12.6648C20.3968 12.2458 20.3968 11.7541 20.1896 11.3351C19.9512 10.8529 19.1797 10.5057 17.6367 9.81135L7.48483 5.24303C5.90879 4.53382 5.12078 4.17921 4.59799 4.32468C4.14397 4.45101 3.77572 4.78336 3.60365 5.22209C3.40551 5.72728 3.67772 6.54741 4.22215 8.18767L5.24829 11.2793C5.34179 11.561 5.38855 11.7019 5.407 11.8459C5.42338 11.9738 5.42321 12.1032 5.40651 12.231C5.38768 12.375 5.34057 12.5157 5.24634 12.7972Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
                         </button>
                     </div>
@@ -287,7 +267,7 @@ const Chat = () => {
 
 
             </Modal>
-        </div>
+        </>
     );
 };
 
