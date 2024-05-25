@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import io from 'socket.io-client';
@@ -10,6 +10,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { useChatContext } from '../layouts/ChatLayout';
+import "./chat.css"
 
 const Chat = ({ setChatData }) => {
     const [messages, setMessages] = useState([]);
@@ -30,9 +31,16 @@ const Chat = ({ setChatData }) => {
     const URL = process.env.REACT_APP_BASE_URL
     const navigate = useNavigate();
 
+    const chatContainerRef = useRef(null);
+
+    useEffect(() => {
+        chatContainerRef.current?.scrollTo({
+            top: chatContainerRef.current.scrollHeight,
+            behavior: 'smooth',
+        });
+    }, [messages]);
 
     const { chats, setChats } = useChatContext();
-
 
     useEffect(() => {
         const verifyAccess = async () => {
@@ -75,6 +83,8 @@ const Chat = ({ setChatData }) => {
             const response = await axios.get(`${URL}/chat-history/${room}`);
             if (response.data.success) {
                 setMessages(response.data.chatHistory);
+                markMessageAsRead();
+                fetchChats();
             } else {
                 console.error('Failed to fetch chat history');
             }
@@ -105,17 +115,21 @@ const Chat = ({ setChatData }) => {
             toast.error(error.message);
         }
     }
-
     const markMessageAsRead = async () => {
         try {
-            await axios.post(`${URL}/mark-message-as-read`, { roomId, userId: currentUserId })
+            await axios.post(`${URL}/mark-message-as-read`, { roomId: room, userId: currentUserId });
+            fetchChatHistory();
+            fetchChats();
         } catch (error) {
-
+            console.error('Error marking messages as read:', error);
         }
-    }
-    useEffect(()=>{
-        
-    },[])
+    };
+
+    useEffect(() => {
+        if (room && currentUserId) {
+            markMessageAsRead();
+        }
+    }, [room, currentUserId]);
 
     useEffect(() => {
 
@@ -128,7 +142,7 @@ const Chat = ({ setChatData }) => {
     useEffect(() => {
         if (!socket) return;
 
-        socket.on("message", (message) => {
+        socket.on("message", async (message) => {
             setMessages((prevMessages) => [...prevMessages, message]);
             fetchChats();
             console.log(message);
@@ -173,7 +187,7 @@ const Chat = ({ setChatData }) => {
                             <FaListUl className='text-2xl cursor-pointer' onClick={() => setOpen(true)} />
                         </div>
                     </div>
-                    <div className="flex-grow overflow-y-auto p-4 mt-2 dark:text-[#dbd5d5]">
+                    <div className="flex-grow overflow-y-auto p-4  dark:text-[#dbd5d5] bg-img bg-opacity-10" ref={chatContainerRef}>
                         <div className="space-y-2">
                             {messages.map((message, index) => (
                                 <div key={index}>
@@ -224,7 +238,7 @@ const Chat = ({ setChatData }) => {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Box className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/5 max-xl:w-3/5 max-md:w-4/5 max-sm:w-[90%] max-sm:text-xs p-6 bg-white dark:bg-[#101010] dark:text-white rounded-md overflow-y-auto max-h-[85%] outline-none">
+                <Box className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/5 max-xl:w-3/5 max-md:w-4/5 max-sm:w-[90%] max-sm:text-xs p-6 bg-white dark:bg-[#101010] dark:text-white rounded-md overflow-y-auto max-h-[85%] outline-none overflow-hidden break-all">
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         Chats
                     </Typography>
