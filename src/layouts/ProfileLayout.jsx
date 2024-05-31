@@ -155,6 +155,7 @@ const ProfileLayout = () => {
             console.log(response);
             checkRequestStatus();
             setIsStatusLoading(false)
+            getUserData();
         } catch (error) {
 
         }
