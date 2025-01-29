@@ -69,7 +69,7 @@ const Notices = () => {
         <div className="my-8 mb-20 dark:text-white">
             <div className="flex justify-center text-lg max-sm:text-sm max-lg:text-base text-center text-[#999999] font-semibold">
                 <div onClick={() => handleViewTypeChange("lost-notices")} className={`w-1/2 border-b-[1px] dark:border-[#777777] dark:border-opacity-30 pb-3 cursor-pointer ${viewType === "lost-notices" ? "border-black dark:border-white dark:border-opacity-100 text-black dark:text-white" : ""}`}>Lost Notices</div>
-                <div onClick={() => handleViewTypeChange("adoption-notices")} className={`w-1/2 border-b-[1px] dark:border-[#777777] dark:border-opacity-30 pb-3 cursor-pointer ${viewType === "adoption-notices" ? "border-black dark:border-white dark:border-opacity-100 text-black dark:text-white" : ""}`}>Adpotion Notices</div>
+                <div onClick={() => handleViewTypeChange("adoption-notices")} className={`w-1/2 border-b-[1px] dark:border-[#777777] dark:border-opacity-30 pb-3 cursor-pointer ${viewType === "adoption-notices" ? "border-black dark:border-white dark:border-opacity-100 text-black dark:text-white" : ""}`}>Adoption Notices</div>
             </div>
 
             {

@@ -330,7 +330,7 @@ const PostDetail = () => {
                                             </div>
 
                                             {
-                                                userId === post.userId._id &&
+                                                userId === comment.userId._id &&
                                                 <>
                                                     <div className="flex gap-x-2 justify-end">
                                                         <div className="text-xl cursor-pointer" onClick={() => deleteComment(comment._id)}><MdDeleteForever /></div>
